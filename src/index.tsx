@@ -2,12 +2,11 @@ import { Plugin, registerPlugin } from 'enmity/managers/plugins';
 import { React } from 'enmity/metro/common';
 import { getByProps } from 'enmity/metro';
 import { create } from 'enmity/patcher';
+import { registerCommands } from "enmity/api/commands";
 import manifest from '../manifest.json';
-import { Messages, Users } from 'enmity/metro/common';
+import { Messages } from 'enmity/metro/common';
 import { FormRow } from 'enmity/components';
-import { sendReply } from "enmity/api/clyde";
-import { githubProfileCommand } from './commands/githubplugin';
-import { getUserInfo, getRepoInfo } from './utils';
+import { editMessageCommand } from './commands/editmessage';
 
 const Patcher = create('double-tap-to-edit');
 const LazyActionSheet = getByProps('openLazy', 'hideActionSheet');
@@ -25,42 +24,20 @@ const DoubleTapToEdit: Plugin = {
          component.then(instance => {
             Patcher.after(instance, 'default', (_, args, res) => {
                const children = res.props.children[1].props.children;
-               const link = res.props.children[0].props.title;
+               const messageId = res.props.children[0].props;
                const channelId = getLastSelectedChannelId.getChannelId();
-               const regex = /^https?:\/\/(www\.)?github.com\/([\w.-]+)\/?(([\w.-]+)?)/;
-               const m = regex.exec(link);
+            
 
-               if (!m) return;
+               children.unshift(
+                  <FormRow label='Edit Message' onPress={() => {
+                     alert(children)
+                     alert(messageId)
+                     alert(channelId)
+                     // Messages.startEditMessage(channelId, messageId, messageContent)
 
-               const [, , owner, name] = m;
-
-               if (name && owner) {
-                  children.unshift(
-                     <FormRow label='View Repo Stats' onPress={() => {
-                        getRepoInfo(owner, name).then(embed => {
-                           sendReply(channelId ?? "0", { embeds: [embed] },
-                              "Github",
-                              "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png");
-                        });
-
-                        hideActionSheet();
-                     }} />,
-                  );
-               }
-
-               if (owner) {
-                  children.unshift(
-                     <FormRow label='View Profile Stats' onPress={() => {
-                        getUserInfo(owner).then(embed => {
-                           sendReply(channelId ?? "0", { embeds: [embed] },
-                              "Github",
-                              "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png");
-                        });
-                        
-                        hideActionSheet();
-                     }} />,
-                  );
-               }
+                     hideActionSheet();
+                  }} />,
+               );
 
                res.props.children[1].props.children = children;
             });
@@ -73,7 +50,7 @@ const DoubleTapToEdit: Plugin = {
 
 
    onStop() {
-      document.removeEventListener('dblclick', doubleclickFunc)
+      this.commands = [];
       Patcher.unpatchAll();
    },
 

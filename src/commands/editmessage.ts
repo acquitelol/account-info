@@ -2,9 +2,9 @@
 
 import { ApplicationCommandInputType, ApplicationCommandOptionType, ApplicationCommandType, Command } from "enmity/api/commands";
 import { sendReply } from "enmity/api/clyde";
-import { getUserInfo, getRepoInfo } from "../utils";
+import { editMessage } from "../utils";
 
-const githubProfileCommand: Command = {
+const editMessageCommand: Command = {
     id: 'github-profile-command',
 
     name: 'github',
@@ -58,4 +58,4 @@ const githubProfileCommand: Command = {
     }
 }
 
-export { githubProfileCommand };
+export { editMessageCommand };
