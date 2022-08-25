@@ -1,52 +1,29 @@
 import { Plugin, registerPlugin } from 'enmity/managers/plugins';
-import { React } from 'enmity/metro/common';
 import { getByProps } from 'enmity/metro';
 import { create } from 'enmity/patcher';
-import { registerCommands } from "enmity/api/commands";
 import manifest from '../manifest.json';
-import { Messages } from 'enmity/metro/common';
-import { FormRow } from 'enmity/components';
-import { editMessageCommand } from './commands/editmessage';
 
-const Patcher = create('double-tap-to-edit');
-const LazyActionSheet = getByProps('openLazy', 'hideActionSheet');
-const getLastSelectedChannelId = getByProps('getLastSelectedChannelId');
+
+const Patcher = create('no-embed-fail');
+const MessagesModule = getByProps("sendMessage");
+const UploadsModule = getByProps("uploadLocalFiles");
 
 
 const DoubleTapToEdit: Plugin = {
    ...manifest,
+   patches: [],
 
    onStart() {
-
-      const unpatcher = Patcher.before(LazyActionSheet, 'openLazy', ({ hideActionSheet }, [component, sheet]) => {
-
-         component.then(instance => {
-            Patcher.after(instance, 'default', (_, args, res) => {
-               const children = res.props.children[1].props.children;
-               const messageId = res.props.children[0].props;
-               const channelId = getLastSelectedChannelId.getChannelId();
-            
-
-               children.unshift(
-                  <FormRow label='Edit Message Custom' onPress={() => {
-                     alert(`1: ${children}`)
-                     alert(`2: ${messageId}`)
-                     alert(`3: ${channelId}`)
-                     alert(`4: ${sheet}`)
-                     // Messages.startEditMessage(channelId, messageId, messageContent)
-
-                     hideActionSheet();
-                  }} />,
-               );
-
-               res.props.children[1].props.children = children;
-            });
-
-            unpatcher();
-         });
-
-      });
+ 
+     Patcher.before(MessagesModule, "sendMessage", (_, args, __) => {
+       args[1].content = args[1].content.replaceAll("media.discordapp.net", "cdn.discordapp.com")
+     });
+ 
+     Patcher.before(UploadsModule, "uploadLocalFiles", (_, args, __) => {
+       args[3].content = args[3].content.replaceAll("media.discordapp.net", "cdn.discordapp.com")
+     });
    },
+ 
 
 
    onStop() {

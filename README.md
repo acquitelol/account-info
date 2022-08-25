@@ -5,10 +5,10 @@
 ---
 
 <div align='center'>
-   <h3>Plugin template</h3>
+   <h3>No Embed Fail</h3>
 
-   Template for Enmity plugins.<br />
-   Use `npm install` to install the required modules and use `npm run build` to build your plugin.
+   Fixes all Embed fails by Replacing the URL.<br />
+   [Install](enmity://enmity?id=-1&command=install-plugin&params=https://github.com/acquitelol/noembedfail/main/dist/NoEmbedFail.js) this Plugin here.
 </div>
 
 ---
