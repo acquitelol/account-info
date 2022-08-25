@@ -7,8 +7,6 @@ import { Image, Text, View } from 'enmity/components';
 import { bulk, filters } from 'enmity/metro';
 
 const Patcher = create('double-tap-to-edit');
-const Messages = getByProps('messages')
-
 
 const [
    MessagesModule,
