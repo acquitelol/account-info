@@ -20,10 +20,9 @@ const DoubleTapToEdit: Plugin = {
    ...manifest,
 
    onStart() {
-      // Patcher.after(MessagesModule, "sendMessage", (self, args, res) => {
-
-      //    });
-      alert(Messages)
+      Patcher.after(MessagesModule, "sendMessage", (self, args, res) => {
+         alert([self, args, res])
+      });
    },
 
    onStop() {
