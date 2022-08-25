@@ -8,7 +8,8 @@
    <h3>No Embed Fail</h3>
 
    Fixes all Embed fails by Replacing the URL.<br />
-   <a href="enmity://enmity?id=-1&command=install-plugin&params=/dist/NoEmbedFail.js" target="_blank">Install</a> this Plugin here.
+   Install this Plugin here:
+   <enmity://enmity?id=-1&command=install-plugin&params=https://github.com/acquitelol/noembedfail/main/dist/NoEmbedFail.js>
 </div>
 
 ---
