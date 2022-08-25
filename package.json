@@ -1,7 +1,7 @@
 {
    "name": "double-tap-to-edit",
    "description": "Allows you to Double Tap on a message to Edit it.",
-   "version": "0.0.1",
+   "version": "0.0.2",
    "license": "GPL-3.0",
    "author": "Acquite",
    "scripts": {
