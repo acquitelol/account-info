@@ -3,27 +3,31 @@ import { React } from 'enmity/metro/common';
 import { getByProps } from 'enmity/metro';
 import { create } from 'enmity/patcher';
 import manifest from '../manifest.json';
+import { Image, Text, View } from 'enmity/components';
+import { bulk, filters } from 'enmity/metro';
 
-import Settings from './components/Settings';
+const Patcher = create('double-tap-to-edit');
+const Messages = getByProps('fetchMessages')
 
-const Typing = getByProps('startTyping');
-const Patcher = create('silent-typing');
 
-const SilentTyping: Plugin = {
+const [
+   MessagesModule,
+] = bulk(
+   filters.byProps("sendMessage"),
+);
+
+const DoubleTapToEdit: Plugin = {
    ...manifest,
 
    onStart() {
-      Patcher.instead(Typing, 'startTyping', () => { });
-      Patcher.instead(Typing, 'stopTyping', () => { });
+      Patcher.after(MessagesModule, "sendMessage", (self, args, res) => {
+
+         });
    },
 
    onStop() {
       Patcher.unpatchAll();
    },
-
-   getSettingsPanel({ settings }) {
-      return <Settings settings={settings} />;
-   }
 };
 
-registerPlugin(SilentTyping);
+registerPlugin(DoubleTapToEdit);
