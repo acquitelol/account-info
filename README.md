@@ -8,8 +8,8 @@
    <h3>No Embed Fail</h3>
 
    Fixes all Embed fails by Replacing the URL.<br />
-   Install this Plugin here:
-   <enmity://enmity?id=-1&command=install-plugin&params=https://github.com/acquitelol/noembedfail/main/dist/NoEmbedFail.js>
+   [Install](https://installnoembedfail.netlify.app) this Plugin here:
+   
 </div>
 
 ---
