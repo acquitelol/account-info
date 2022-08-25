@@ -19,7 +19,7 @@ const DoubleTapToEdit: Plugin = {
    onStart() {
 
       const unpatcher = Patcher.before(LazyActionSheet, 'openLazy', ({ hideActionSheet }, [component, sheet]) => {
-         if (sheet !== 'LongPressUrl') return;
+         if (sheet !== 'LongPressMessage') return;
 
          component.then(instance => {
             Patcher.after(instance, 'default', (_, args, res) => {
@@ -29,10 +29,10 @@ const DoubleTapToEdit: Plugin = {
             
 
                children.unshift(
-                  <FormRow label='Edit Message' onPress={() => {
-                     alert(children)
-                     alert(messageId)
-                     alert(channelId)
+                  <FormRow label='Edit Message Custom' onPress={() => {
+                     alert(`${children}`)
+                     alert(`${messageId}`)
+                     alert(`${channelId}`)
                      // Messages.startEditMessage(channelId, messageId, messageContent)
 
                      hideActionSheet();
