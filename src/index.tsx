@@ -18,8 +18,8 @@ const DoubleTapToEdit: Plugin = {
    ...manifest,
 
    onStart() {
-      Patcher.after(MessagesModule, "sendMessage", (self, args, res) => {
-         alert('You have sent a message :skull:!')
+      Patcher.before(MessagesModule, "sendMessage", (self, args, res) => {
+         alert('You are about to send a message :skull:!')
       });
    },
 
