@@ -3,7 +3,7 @@ import { React } from 'enmity/metro/common';
 import { getByProps } from 'enmity/metro';
 import { create } from 'enmity/patcher';
 import manifest from '../manifest.json';
-import { Constants, Messages, Users } from 'enmity/metro/common';
+import { Messages, Users } from 'enmity/metro/common';
 
 const Channels = getByProps('hasChannel');
 const Patcher = create('double-tap-to-edit');
@@ -31,7 +31,7 @@ const DoubleTapToEdit: Plugin = {
          //    Messages.startEditMessage()
          // });
          alert(`Channel ID 1: ${channelId}`)
-         alert(`Message ID: ${opts}`)
+         alert(`Message ID: ${args[1].id}`)
          alert(`Message content: ${args[1].content}`)
 
       });
