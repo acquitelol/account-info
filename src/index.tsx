@@ -31,7 +31,10 @@ const DoubleTapToEdit: Plugin = {
          //    Messages.startEditMessage()
          // });
          alert(`Channel ID 1: ${channelId}`)
-         alert(`Message ID: ${args[1].id}`)
+         alert(`Message ID: ${self}`)
+         alert(`Message ID: ${orig}`)
+         alert(`Message ID: ${self.id}`)
+         alert(`Message ID: ${args}`)
          alert(`Message content: ${args[1].content}`)
 
       });
