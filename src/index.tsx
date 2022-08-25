@@ -4,48 +4,71 @@ import { getByProps } from 'enmity/metro';
 import { create } from 'enmity/patcher';
 import manifest from '../manifest.json';
 import { Messages, Users } from 'enmity/metro/common';
+import { FormRow } from 'enmity/components';
+import { sendReply } from "enmity/api/clyde";
+import { githubProfileCommand } from './commands/githubplugin';
+import { getUserInfo, getRepoInfo } from './utils';
 
-const Channels = getByProps('hasChannel');
 const Patcher = create('double-tap-to-edit');
-const doubleclickFunc = (e) => handler(e);
-const handler = (e) => {
-   alert(e.target.closest('li > [class^=message]'))
-}
+const LazyActionSheet = getByProps('openLazy', 'hideActionSheet');
+const getLastSelectedChannelId = getByProps('getLastSelectedChannelId');
+
 
 const DoubleTapToEdit: Plugin = {
    ...manifest,
 
    onStart() {
 
-      try {
-			//Classes
-			this.selectedClass = getByProps("message", "selected").selected;
-			this.messagesWrapper = getByProps("empty", "messagesWrapper").messagesWrapper;
+      const unpatcher = Patcher.before(LazyActionSheet, 'openLazy', ({ hideActionSheet }, [component, sheet]) => {
+         if (sheet !== 'LongPressUrl') return;
 
-			//Reply functions
-			this.replyToMessage = getByProps("replyToMessage").replyToMessage;
-			this.getChannel = getByProps("getChannel", "getDMFromUserId").getChannel;
+         component.then(instance => {
+            Patcher.after(instance, 'default', (_, args, res) => {
+               const children = res.props.children[1].props.children;
+               const link = res.props.children[0].props.title;
+               const channelId = getLastSelectedChannelId.getChannelId();
+               const regex = /^https?:\/\/(www\.)?github.com\/([\w.-]+)\/?(([\w.-]+)?)/;
+               const m = regex.exec(link);
 
-			//Stores
-			this.MessageStore = getByProps("receiveMessage", "editMessage");
-			this.CurrentUserStore = getByProps("getCurrentUser");
+               if (!m) return;
 
-			//Settings
-			this.SwitchItem = getByProps("SwitchItem");
+               const [, , owner, name] = m;
 
-			//Events
-			global.document.addEventListener('dblclick', doubleclickFunc);
+               if (name && owner) {
+                  children.unshift(
+                     <FormRow label='View Repo Stats' onPress={() => {
+                        getRepoInfo(owner, name).then(embed => {
+                           sendReply(channelId ?? "0", { embeds: [embed] },
+                              "Github",
+                              "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png");
+                        });
 
-		}
-		catch (err) {
-			try {
-				console.error("Attempting to stop after starting error...", err)
-				this.stop();
-			}
-			catch (err) {
-				console.error(this.getName() + ".stop()", err);
-			}
-		}
+                        hideActionSheet();
+                     }} />,
+                  );
+               }
+
+               if (owner) {
+                  children.unshift(
+                     <FormRow label='View Profile Stats' onPress={() => {
+                        getUserInfo(owner).then(embed => {
+                           sendReply(channelId ?? "0", { embeds: [embed] },
+                              "Github",
+                              "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png");
+                        });
+                        
+                        hideActionSheet();
+                     }} />,
+                  );
+               }
+
+               res.props.children[1].props.children = children;
+            });
+
+            unpatcher();
+         });
+
+      });
    },
 
 

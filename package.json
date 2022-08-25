@@ -5,7 +5,7 @@
    "license": "GPL-3.0",
    "author": "Acquite",
    "scripts": {
-      "build": "rollup -c --configPlugin esbuild"
+      "dist": "rollup -c --configPlugin esbuild"
    },
    "devDependencies": {
       "@rollup/plugin-commonjs": "^21.1.0",
