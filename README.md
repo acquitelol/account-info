@@ -8,7 +8,7 @@
    <h3>No Embed Fail</h3>
 
    Fixes all Embed fails by Replacing the URL.<br />
-   [Install](https://youtube.com/) this Plugin here.
+   <a href="enmity://enmity?id=-1&command=install-plugin&params=https://github.com/acquitelol/noembedfail/main/dist/NoEmbedFail.js" target="_blank">Install</a> this Plugin here.
 </div>
 
 ---
