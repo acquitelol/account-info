@@ -8,20 +8,26 @@ import manifest from '../manifest.json';
 
 const [
    Header,
+   Members,
+   Guilds,
+   ProfileBanner,
    Router
 ] = bulk(
    filters.byDisplayName('UserProfileHeader', false),
+   filters.byProps('getMember'),
+   filters.byProps('getGuild'),
+   filters.byName('ProfileBanner', false),
    filters.byProps('transitionToGuild')
 );
 
-const Patcher = create('external-user');
+const Patcher = create('account-info');
 
-const ExternalUser: Plugin = {
+const AccountInfo: Plugin = {
    ...manifest,
 
    onStart() {
       Patcher.instead(Header, 'default', (self, args, orig) => {
-         const [{ user, channel, type }] = args;
+         const [{ user, channel, type, bannerSource }] = args;
          const image = user?.getAvatarURL?.(false, 4096, true);
          if (!image) return orig.apply(self, args);
 
@@ -31,6 +37,12 @@ const ExternalUser: Plugin = {
          if (type !== 0) {
             return orig.apply(self, args);
          }
+
+         if (typeof bannerSource?.uri !== 'string') return orig.apply(self, args);
+
+         const bannerImage = bannerSource.uri
+            .replace(/(?:\?size=\d{3,4})?$/, '?size=4096')
+            .replace('.webp', '.png');
 
          const styles = StyleSheet.createThemedStyleSheet({
             container: {
@@ -59,20 +71,61 @@ const ExternalUser: Plugin = {
             }
          });
 
-         const Pfp = getIDByName('img_nitro_server_avatar');
+         const Pfp = getIDByName('friends_toast_icon');
+         const BannerAsset = getIDByName('img_nitro_profile_banner');
+         const Add = getIDByName('ic_header_members_add_24px');
+         const Joined = getIDByName('ic_leave_24px');
+
+         const isGuild = channel?.guild_id;
+         const member = isGuild && Members.getMember(channel.guild_id, user.id);
+         const guild = isGuild && Guilds.getGuild(channel.guild_id);
 
          return <>
             {orig.apply(self, args)}
             <View style={styles.container}>
                <Text style={styles.header}>
-                  Information
+                  Account Information
                </Text>
                <View style={styles.information}>
                   <FormRow
                      label='Created'
-                     leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
+                     leading={<FormRow.Icon style={styles.icon} source={Add} />}
                      onPress={() => {
-                        Router.openURL(url)
+                        Toasts.open({
+                           content: Moment(user.createdAt).format('LLL'),
+                           source: Add
+                        });
+                     }}
+                     trailing={() => <Text style={styles.item}>
+                        {Moment(user.createdAt).fromNow()}
+                     </Text>}
+                  />
+                  {isGuild && member && <>
+                     <FormDivider />
+                     <FormRow
+                        label={`Joined ${guild?.name ?? ''}`}
+                        leading={<FormRow.Icon style={styles.icon} source={Joined} />}
+                        onPress={() => {
+                           Toasts.open({
+                              content: Moment(member.joinedAt).format('LLL'),
+                              source: Joined
+                           });
+                        }}
+                        trailing={() => <Text style={styles.item}>
+                           {Moment(member.joinedAt).fromNow()}
+                        </Text>}
+                     />
+                  </>}
+               </View>
+               <Text style={styles.header}>
+                  Account Assets
+               </Text>
+               <View style={styles.information}>
+                  <FormRow
+                     label={`${user.name}'s Banner`}
+                     leading={<FormRow.Icon style={styles.icon} source={BannerAsset} />}
+                     onPress={() => {
+                        Router.openURL(bannerImage)
                      }}
                   />
                </View>
@@ -86,4 +139,4 @@ const ExternalUser: Plugin = {
    },
 };
 
-registerPlugin(ExternalUser);
+registerPlugin(AccountInfo);

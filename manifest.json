@@ -1,7 +1,7 @@
 {
-   "name": "ExternalUser",
-   "version": "0.0.1",
-   "description": "Opens the user's PFP externally.",
+   "name": "AccountInfo",
+   "version": "0.0.2",
+   "description": "Successor to UserDetails by eternal#1000",
    "authors": [
       {
          "name": "acquite",
