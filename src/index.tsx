@@ -40,7 +40,7 @@ const AccountInfo: Plugin = {
             return orig.apply(self, args);
          }
 
-         if (typeof bannerSource?.uri !== 'string' || !orig.apply(self, args)) return orig.apply(self, args);
+         if (typeof bannerSource?.uri !== 'string') return orig.apply(self, args);
 
          const bannerRealImg = bannerSource.uri
             .replace(/(?:\?size=\d{3,4})?$/, '?size=4096')
