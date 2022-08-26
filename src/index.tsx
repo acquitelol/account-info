@@ -1,4 +1,4 @@
-import { Constants, Moment, React, StyleSheet, Toasts } from 'enmity/metro/common';
+import { Constants, Moment, StyleSheet, Toasts } from 'enmity/metro/common';
 import { FormDivider, FormRow, Text, View } from 'enmity/components';
 import { Plugin, registerPlugin } from 'enmity/managers/plugins';
 import { getIDByName } from 'enmity/api/assets';
@@ -25,11 +25,11 @@ const AccountInfo: Plugin = {
 
    onStart() {
       Patcher.instead(Header, 'default', (self, args, orig) => {
-         const [{ user, channel, type, bannerSource }] = args;
+         const [{ user, channel, type }] = args;
          const getName = (str: string) => {
             return str.slice(0).charAt(0).toUpperCase() + str.slice(1)
          }
-         const realUsername = getName(user.username)
+         const finalUsername = getName(user.username)
          const image = user?.getAvatarURL?.(false, 4096, true);
          if (!image) return orig.apply(self, args);
 
@@ -39,12 +39,6 @@ const AccountInfo: Plugin = {
          if (type !== 0) {
             return orig.apply(self, args);
          }
-
-         if (typeof bannerSource?.uri !== 'string') return orig.apply(self, args);
-
-         const bannerRealImg = bannerSource.uri
-            .replace(/(?:\?size=\d{3,4})?$/, '?size=4096')
-            .replace('.webp', '.png');
          
          const styles = StyleSheet.createThemedStyleSheet({
             container: {
@@ -74,8 +68,7 @@ const AccountInfo: Plugin = {
             }
          });
 
-         const Pfp = getIDByName('friends_toast_icon')
-         const BannerAsset = getIDByName('img_nitro_profile_banner');
+         const Pfp = getIDByName('img_nitro_profile_banner');
          const Add = getIDByName('ic_header_members_add_24px');
          const Joined = getIDByName('ic_leave_24px');
 
@@ -125,18 +118,10 @@ const AccountInfo: Plugin = {
                </Text>
                <View style={styles.information}>
                   <FormRow
-                     label={`${realUsername}' Profile Picture`}
+                     label={`${finalUsername}' Profile Picture`}
                      leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
                      onPress={() => {
                         Router.openURL(url)
-                     }}
-                  />
-                  <FormDivider />
-                  <FormRow
-                     label={`${realUsername}' Banner`}
-                     leading={<FormRow.Icon style={styles.icon} source={BannerAsset} />}
-                     onPress={() => {
-                        Router.openURL(bannerRealImg)
                      }}
                   />
                </View>
