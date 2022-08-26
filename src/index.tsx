@@ -41,7 +41,6 @@ const AccountInfo: Plugin = {
                marginLeft: 15.5,
                marginRight: 15.5,
                marginTop: 17.5,
-               marginBottom: 17.5
             },
             header: {
                color: Constants.ThemeColorMap.HEADER_SECONDARY,
@@ -54,7 +53,8 @@ const AccountInfo: Plugin = {
             information: {
                borderRadius: 4,
                backgroundColor: Constants.ThemeColorMap.BACKGROUND_TERTIARY,
-               marginTop: 10
+               marginTop: 10,
+               marginBottom: 10
             },
             item: {
                color: Constants.ThemeColorMap.TEXT_MUTED
