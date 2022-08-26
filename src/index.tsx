@@ -29,7 +29,6 @@ const AccountInfo: Plugin = {
       Patcher.instead(Header, 'default', (self, args, orig) => {
          const [{ user, channel, type, bannerSource }] = args;
          const image = user?.getAvatarURL?.(false, 4096, true);
-         if (!image) return orig.apply(self, args);
 
          const discrim = user.discriminator % 5;
          const url = typeof image === 'number' ? `https://cdn.discordapp.com/embed/avatars/${discrim}.png` : image?.replace('.webp', '.png');
@@ -37,8 +36,6 @@ const AccountInfo: Plugin = {
          if (type !== 0) {
             return orig.apply(self, args);
          }
-
-         if (typeof bannerSource?.uri !== 'string') return orig.apply(self, args);
 
          const bannerImage = bannerSource.uri
             .replace(/(?:\?size=\d{3,4})?$/, '?size=4096')
@@ -122,7 +119,15 @@ const AccountInfo: Plugin = {
                </Text>
                <View style={styles.information}>
                   <FormRow
-                     label={`${user.name}'s Banner`}
+                     label={`User Profile Picture`}
+                     leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
+                     onPress={() => {
+                        Router.openURL(url)
+                     }}
+                  />
+                  <FormDivider />
+                  <FormRow
+                     label={`User Banner`}
                      leading={<FormRow.Icon style={styles.icon} source={BannerAsset} />}
                      onPress={() => {
                         Router.openURL(bannerImage)
