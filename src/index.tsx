@@ -1,4 +1,4 @@
-import { Constants, Moment, StyleSheet, Toasts } from 'enmity/metro/common';
+import { Constants, Moment, React, StyleSheet, Toasts } from 'enmity/metro/common';
 import { FormDivider, FormRow, Text, View } from 'enmity/components';
 import { Plugin, registerPlugin } from 'enmity/managers/plugins';
 import { getIDByName } from 'enmity/api/assets';
@@ -26,6 +26,7 @@ const AccountInfo: Plugin = {
    onStart() {
       Patcher.instead(Header, 'default', (self, args, orig) => {
          const [{ user, channel, type }] = args;
+
          const image = user?.getAvatarURL?.(false, 4096, true);
          if (!image) return orig.apply(self, args);
 
@@ -114,7 +115,7 @@ const AccountInfo: Plugin = {
                </Text>
                <View style={styles.information}>
                   <FormRow
-                     label={`${user}' Profile Picture`}
+                     label={`${user}'s Profile Picture`}
                      leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
                      onPress={() => {
                         Router.openURL(url)
