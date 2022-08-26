@@ -1,7 +1,7 @@
 {
-   "name": "SafeOpenURL",
+   "name": "ExternalUser",
    "version": "0.0.1",
-   "description": "Prompts you to open a URL like in Discord Desktop.",
+   "description": "Opens the user's PFP externally.",
    "authors": [
       {
          "name": "acquite",
