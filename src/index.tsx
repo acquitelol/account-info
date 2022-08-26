@@ -40,7 +40,8 @@ const AccountInfo: Plugin = {
             container: {
                marginLeft: 15.5,
                marginRight: 15.5,
-               marginTop: 17.5
+               marginTop: 17.5,
+               marginBottom: 17.5
             },
             header: {
                color: Constants.ThemeColorMap.HEADER_SECONDARY,
