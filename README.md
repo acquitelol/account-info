@@ -5,10 +5,10 @@
 ---
 
 <div align='center'>
-   <h3>No Embed Fail</h3>
+   <h3>Account Info</h3>
 
-   Fixes all Embed fails by Replacing the URL.<br />
-   [Install](/dist/NoEmbedFail.js) this Plugin here
+   Shows Account Information and Account Assets.<br />
+
    
 </div>
 
