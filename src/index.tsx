@@ -6,11 +6,11 @@ import { Constants, Moment, React, StyleSheet, Toasts } from 'enmity/metro/commo
 import { FormDivider, FormRow, Text, View, Button, Alert } from 'enmity/components';
 
 const Patcher = create('safe-open-link');
-const openLink = getByProps("openURL");
+const openLink = getByProps("showLongPressActionSheet");
 
 const SafeOpenLink: Plugin = {
   name: "SafeOpenURL",
-  version: "0.0.2",
+  version: "0.0.3",
   description: "Prompts you to open a URL like in Discord Desktop.",
   authors: [
      {
@@ -21,9 +21,8 @@ const SafeOpenLink: Plugin = {
 
   onStart() {
 
-    Patcher.instead(openLink, 'openURL', (self, args, orig) => {
+    Patcher.instead(openLink, 'openURL', (self, args) => {
         return <>
-          {orig.apply(self, args)}
           <Alert>
             Clicked URL
           </Alert>
