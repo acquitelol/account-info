@@ -1,0 +1,2 @@
+import './dumped' as dumped;
+

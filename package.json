@@ -27,6 +27,7 @@
    },
    "dependencies": {
       "build": "^0.1.4",
+      "emity": "^0.0.3",
       "enmity": "*",
       "enmity-tools": "github:enmity-mod/enmity-tools"
    }

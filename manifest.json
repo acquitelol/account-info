@@ -1,7 +1,7 @@
 {
-   "name": "NoEmbedFail",
-   "version": "0.1.1",
-   "description": "Fixes any Embed Fails you might have.",
+   "name": "SafeOpenURL",
+   "version": "0.0.1",
+   "description": "Prompts you to open a URL like in Discord Desktop.",
    "authors": [
       {
          "name": "acquite",
