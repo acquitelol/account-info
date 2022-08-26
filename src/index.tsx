@@ -10,13 +10,11 @@ const [
    Header,
    Members,
    Guilds,
-   ProfileBanner,
    Router
 ] = bulk(
    filters.byDisplayName('UserProfileHeader', false),
    filters.byProps('getMember'),
    filters.byProps('getGuild'),
-   filters.byName('ProfileBanner', false),
    filters.byProps('transitionToGuild')
 );
 
@@ -27,8 +25,9 @@ const AccountInfo: Plugin = {
 
    onStart() {
       Patcher.instead(Header, 'default', (self, args, orig) => {
-         const [{ user, channel, type, bannerSource }] = args;
+         const [{ user, channel, type }] = args;
          const image = user?.getAvatarURL?.(false, 4096, true);
+         if (!image) return orig.apply(self, args);
 
          const discrim = user.discriminator % 5;
          const url = typeof image === 'number' ? `https://cdn.discordapp.com/embed/avatars/${discrim}.png` : image?.replace('.webp', '.png');
@@ -36,11 +35,7 @@ const AccountInfo: Plugin = {
          if (type !== 0) {
             return orig.apply(self, args);
          }
-
-         const bannerImage = bannerSource.uri
-            .replace(/(?:\?size=\d{3,4})?$/, '?size=4096')
-            .replace('.webp', '.png');
-
+         
          const styles = StyleSheet.createThemedStyleSheet({
             container: {
                marginLeft: 15.5,
@@ -68,8 +63,7 @@ const AccountInfo: Plugin = {
             }
          });
 
-         const Pfp = getIDByName('friends_toast_icon');
-         const BannerAsset = getIDByName('img_nitro_profile_banner');
+         const Pfp = getIDByName('img_nitro_profile_banner');
          const Add = getIDByName('ic_header_members_add_24px');
          const Joined = getIDByName('ic_leave_24px');
 
@@ -123,14 +117,6 @@ const AccountInfo: Plugin = {
                      leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
                      onPress={() => {
                         Router.openURL(url)
-                     }}
-                  />
-                  <FormDivider />
-                  <FormRow
-                     label={`User Banner`}
-                     leading={<FormRow.Icon style={styles.icon} source={BannerAsset} />}
-                     onPress={() => {
-                        Router.openURL(bannerImage)
                      }}
                   />
                </View>
