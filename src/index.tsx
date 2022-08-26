@@ -26,10 +26,6 @@ const AccountInfo: Plugin = {
    onStart() {
       Patcher.instead(Header, 'default', (self, args, orig) => {
          const [{ user, channel, type }] = args;
-         const getName = (str: string) => {
-            return str.slice(0).charAt(0).toUpperCase() + str.slice(1)
-         }
-         const finalUsername = getName(user.username)
          const image = user?.getAvatarURL?.(false, 4096, true);
          if (!image) return orig.apply(self, args);
 
@@ -118,7 +114,7 @@ const AccountInfo: Plugin = {
                </Text>
                <View style={styles.information}>
                   <FormRow
-                     label={`${finalUsername}' Profile Picture`}
+                     label={`${user}' Profile Picture`}
                      leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
                      onPress={() => {
                         Router.openURL(url)
