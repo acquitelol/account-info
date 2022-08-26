@@ -26,10 +26,7 @@ const AccountInfo: Plugin = {
    onStart() {
       Patcher.instead(Header, 'default', (self, args, orig) => {
          const [{ user, channel, type }] = args;
-         alert(user)
-         alert(user.name)
-         alert(user.username)
-         
+
          const image = user?.getAvatarURL?.(false, 4096, true);
          if (!image) return orig.apply(self, args);
 
@@ -118,7 +115,7 @@ const AccountInfo: Plugin = {
                </Text>
                <View style={styles.information}>
                   <FormRow
-                     label={`User Profile Picture`}
+                     label={`${user}'s Profile Picture`}
                      leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
                      onPress={() => {
                         Router.openURL(url)
