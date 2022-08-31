@@ -10,13 +10,11 @@ const [
    Header,
    Members,
    Guilds,
-   LastMessage,
    Router
 ] = bulk(
    filters.byDisplayName('UserProfileHeader', false),
    filters.byProps('getMember'),
    filters.byProps('getGuild'),
-   filters.byProps('getLastMessage'),
    filters.byProps('transitionToGuild')
 );
 
@@ -28,13 +26,6 @@ const AccountInfo: Plugin = {
    onStart() {
       Patcher.instead(Header, 'default', (self, args, orig) => {
          const [{ user, channel, type }] = args;
-
-         console.log(LastMessage.getLastMessage(user.id))
-         const image = user?.getAvatarURL?.(false, 4096, true);
-         if (!image) return orig.apply(self, args);
-
-         const discrim = user.discriminator % 5;
-         const url = typeof image === 'number' ? `https://cdn.discordapp.com/embed/avatars/${discrim}.png` : image?.replace('.webp', '.png');
 
          if (type !== 0) {
             return orig.apply(self, args);
@@ -75,6 +66,12 @@ const AccountInfo: Plugin = {
          const isGuild = channel?.guild_id;
          const member = isGuild && Members.getMember(channel.guild_id, user.id);
          const guild = isGuild && Guilds.getGuild(channel.guild_id);
+
+         const image = isGuild ? member?.getAvatarURL?.(false, 4096, true) : user?.getAvatarURL?.(false, 4096, true);
+         if (!image) return orig.apply(self, args);
+
+         const discrim = user.discriminator % 5;
+         const url = typeof image === 'number' ? `https://cdn.discordapp.com/embed/avatars/${discrim}.png` : image?.replace('.webp', '.png');
 
          return <>
             {orig.apply(self, args)}
@@ -118,7 +115,7 @@ const AccountInfo: Plugin = {
                </Text>
                <View style={styles.information}>
                   <FormRow
-                     label={`${user.username}'s Profile Picture`}
+                     label={`${user.username}'s ${isGuild ? "Server" : ""} Profile Picture`}
                      leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
                      onPress={() => {
                         Router.openURL(url)
