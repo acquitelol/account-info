@@ -10,11 +10,13 @@ const [
    Header,
    Members,
    Guilds,
+   LastMessage,
    Router
 ] = bulk(
    filters.byDisplayName('UserProfileHeader', false),
    filters.byProps('getMember'),
    filters.byProps('getGuild'),
+   filters.byProps('getLastMessage'),
    filters.byProps('transitionToGuild')
 );
 
@@ -27,7 +29,7 @@ const AccountInfo: Plugin = {
       Patcher.instead(Header, 'default', (self, args, orig) => {
          const [{ user, channel, type }] = args;
 
-         console.log(user?.getLastMessage?.(user.id))
+         console.log(LastMessage.getLastMessage(user.id))
          const image = user?.getAvatarURL?.(false, 4096, true);
          if (!image) return orig.apply(self, args);
 
