@@ -26,8 +26,7 @@ const AccountInfo: Plugin = {
    onStart() {
       Patcher.instead(Header, 'default', (self, args, orig) => {
          const [{ user, channel, type }] = args;
-         alert(user.lastMessage)
-         alert(user.createdAt)
+         alert(args[4])
 
          const image = user?.getAvatarURL?.(false, 4096, true);
          if (!image) return orig.apply(self, args);
