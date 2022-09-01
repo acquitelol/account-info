@@ -22,6 +22,7 @@ const [
 
 const Patcher = create('account-info');
 const Activity = getByProps('getStatus', 'getState')
+const Bio = getByProps('')
 
 const AccountInfo: Plugin = {
    ...manifest,
@@ -64,7 +65,7 @@ const AccountInfo: Plugin = {
          });
 
          const Pfp = getIDByName('img_nitro_profile_banner');
-         const ActivityToast = getIDByName('rejected-alert');
+         const ActivityToast = getIDByName('pending-alert');
          const ActivityForm = getIDByName('toast_copy_link');
          const Add = getIDByName('ic_header_members_add_24px');
          const Joined = getIDByName('ic_leave_24px');
