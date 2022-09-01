@@ -20,7 +20,7 @@ export default ({ settings }: SettingsProps) => {
                         value={settings.getBoolean('pfpBtn', false)}
                         onValueChange={() => {
                                 settings.toggle('pfpBtn', false)
-                                Toasts.open({ content: 'Copied to clipboard', source: toastTrail });
+                                Toasts.open({ content: 'Toggled Profile Picture Button', source: toastTrail });
                             }
                         }
                     />
@@ -34,7 +34,7 @@ export default ({ settings }: SettingsProps) => {
                         value={settings.getBoolean('statusBtn', false)}
                         onValueChange={() => {
                                 settings.toggle('statusBtn', false)
-                                Toasts.open({ content: 'Copied to clipboard', source: toastTrail });
+                                Toasts.open({ content: 'Toggled Status Button', source: toastTrail });
                             }
                         }
                     />

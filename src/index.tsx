@@ -15,7 +15,6 @@ const [
    Router,
    Clipboard,
    AvatarHeader,
-   StatusHeader
 ] = bulk(
    filters.byDisplayName('UserProfileHeader', false),
    filters.byProps('getMember'),
@@ -23,7 +22,6 @@ const [
    filters.byProps('transitionToGuild'),
    filters.byProps('setString'),
    filters.byName('HeaderAvatar', false),
-   filters.byName('ProfileStatus', false),
 );
 
 const Patcher = create('account-info');
@@ -104,7 +102,7 @@ const AccountInfo: Plugin = {
             });
          }
          if(!statusBool) {
-            Patcher.after(StatusHeader, 'default', (_, [{ user }], res) => {
+            Patcher.after(Activity, 'default', (_, [{ user }], res) => {
                const ActivityToast = getIDByName('pending-alert');
                const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
    
