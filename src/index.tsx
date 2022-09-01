@@ -135,7 +135,7 @@ const AccountInfo: Plugin = {
                            label={`Copy ${user.username}'s Status`}
                            leading={<FormRow.Icon style={styles.icon} source={ActivityForm} />}
                            onPress={() => {
-                              Clipboard.setString(activityContent);
+                              Clipboard.setString(activityContent.state);
                               Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
                            }}
                         />
