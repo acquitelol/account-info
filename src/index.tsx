@@ -16,7 +16,6 @@ const [
    Router,
    Clipboard,
    AvatarHeader,
-   StatusHeader
 ] = bulk(
    filters.byDisplayName('UserProfileHeader', false),
    filters.byProps('getMember'),
@@ -24,7 +23,6 @@ const [
    filters.byProps('transitionToGuild'),
    filters.byProps('setString'),
    filters.byName('HeaderAvatar', false),
-   filters.byName('CustomStatusSection', false),
 );
 
 const Patcher = create('account-info');
@@ -173,18 +171,18 @@ const AccountInfo: Plugin = {
          </Pressable> : <>{res}</>;
       })
 
-      Patcher.after(StatusHeader, 'default', (_, [{ user }], res) => {
-         let statusBool = getBoolean("AccountInfo", "statusBtn", false)
-         const ActivityToast = getIDByName('pending-alert');
-         const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
+      // Patcher.after(StatusHeader, 'default', (_, [{ user }], res) => {
+      //    let statusBool = getBoolean("AccountInfo", "statusBtn", false)
+      //    const ActivityToast = getIDByName('pending-alert');
+      //    const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
 
-         return statusBool ? <Pressable onPress={() => {
-            Clipboard.setString(activityContent.state);
-            Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
-         }}>
-            {res}
-         </Pressable> : <>{res}</>;
-      })
+      //    return statusBool ? <Pressable onPress={() => {
+      //       Clipboard.setString(activityContent.state);
+      //       Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
+      //    }}>
+      //       {res}
+      //    </Pressable> : <>{res}</>;
+      // })
    },
 
    onStop() {
