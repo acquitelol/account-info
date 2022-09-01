@@ -2,7 +2,7 @@ const { WebSocketServer } = require('ws');
 const path = require('path');
 const fs = require('fs');
 
-const wss = new WebSocketServer({ port: 9090 });
+const wss = new WebSocketServer({ port: 9095 });
 
 // Create dump folder if it doesn't exist
 const folder = path.join(__dirname, 'dumped');

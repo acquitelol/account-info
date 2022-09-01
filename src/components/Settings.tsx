@@ -12,6 +12,35 @@ export default ({ settings }: SettingsProps) => {
    const toastTrail = getIDByName('ic_selection_checked_24px');
    return <>
     <ScrollView>
+        <FormSection title="Enable Account Date Information">
+            <FormRow
+                label='Time of Creation'
+                trailing={
+                    <FormSwitch
+                        value={settings.getBoolean('createBtn', true)}
+                        onValueChange={() => {
+                                settings.toggle('createBtn', true)
+                                Toasts.open({ content: 'Toggled Time of Creation', source: toastTrail });
+                            }
+                        }
+                    />
+                }
+            />
+            <FormDivider />
+            <FormRow
+                label='Time of Join Server'
+                trailing={
+                    <FormSwitch
+                        value={settings.getBoolean('joinBtn', true)}
+                        onValueChange={() => {
+                                settings.toggle('joinBtn', true)
+                                Toasts.open({ content: 'Toggled Status Button', source: toastTrail });
+                            }
+                        }
+                    />
+                }
+            />
+        </FormSection>
         <FormSection title="Enable Dedicated Buttons">
             <FormRow
                 label='Profile Picture'

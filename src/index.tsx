@@ -7,6 +7,7 @@ import { create } from 'enmity/patcher';
 import manifest from '../manifest.json';
 import Settings from './components/Settings';
 import { getBoolean } from 'enmity/api/settings'
+import { join } from 'path';
 
 const [
    Header,
@@ -26,7 +27,7 @@ const [
 
 const Patcher = create('account-info');
 const Activity = getByProps('getStatus', 'getState')
-const ActivityHeader = getByProps('customStatusActivity')
+const ActivityHeader = getByProps('activity', '')
 
 const AccountInfo: Plugin = {
    ...manifest,
@@ -35,6 +36,9 @@ const AccountInfo: Plugin = {
       Patcher.instead(Header, 'default', (self, args, orig) => {
          let pfpBool = getBoolean("AccountInfo", 'pfpBtn', false)
          let statusBool = getBoolean("AccountInfo", "statusBtn", false)
+         let createBool = getBoolean("AccountInfo", "createBtn", true)
+         let joinBool = getBoolean("AccountInfo", "joinBtn", true)
+
          const [{ user, channel, type }] = args;
 
 
@@ -91,40 +95,45 @@ const AccountInfo: Plugin = {
          return <>
             {orig.apply(self, args)}
             <View style={styles.container}>
-               <Text style={styles.header}>
-                  Account Information
-               </Text>
-               <View style={styles.information}>
-                  <FormRow
-                     label='Created'
-                     leading={<FormRow.Icon style={styles.icon} source={Add} />}
-                     onPress={() => {
-                        Toasts.open({
-                           content: Moment(user.createdAt).format('LLL'),
-                           source: Add
-                        });
-                     }}
-                     trailing={() => <Text style={styles.item}>
-                        {Moment(user.createdAt).fromNow()}
-                     </Text>}
-                  />
-                  {isGuild && member && <>
-                     <FormDivider />
-                     <FormRow
-                        label={`Joined ${guild?.name ?? ''}`}
-                        leading={<FormRow.Icon style={styles.icon} source={Joined} />}
-                        onPress={() => {
-                           Toasts.open({
-                              content: Moment(member.joinedAt).format('LLL'),
-                              source: Joined
-                           });
-                        }}
-                        trailing={() => <Text style={styles.item}>
-                           {Moment(member.joinedAt).fromNow()}
-                        </Text>}
-                     />
-                  </>}
-               </View>
+               {(createBool || joinBool) ? <>
+                  <Text style={styles.header}>
+                     Account Information
+                  </Text>
+                  
+                  <View style={styles.information}>
+                     {createBool && <>
+                        <FormRow
+                           label='Created'
+                           leading={<FormRow.Icon style={styles.icon} source={Add} />}
+                           onPress={() => {
+                              Toasts.open({
+                                 content: Moment(user.createdAt).format('LLL'),
+                                 source: Add
+                              });
+                           }}
+                           trailing={() => <Text style={styles.item}>
+                              {Moment(user.createdAt).fromNow()}
+                           </Text>}
+                        />
+                     </>}
+                     {createBool && joinBool && isGuild && member && <FormDivider />}
+                     {joinBool && isGuild && member &&<>
+                        <FormRow
+                           label={`Joined ${guild?.name ?? ''}`}
+                           leading={<FormRow.Icon style={styles.icon} source={Joined} />}
+                           onPress={() => {
+                              Toasts.open({
+                                 content: Moment(member.joinedAt).format('LLL'),
+                                 source: Joined
+                              });
+                           }}
+                           trailing={() => <Text style={styles.item}>
+                              {Moment(member.joinedAt).fromNow()}
+                           </Text>}
+                        />
+                     </>}
+                  </View>
+               </> : <></>}
                {(pfpBool || statusBool) ? <>
                   <Text style={styles.header}>
                      Account Assets
@@ -145,7 +154,7 @@ const AccountInfo: Plugin = {
                               label={`Copy ${user.username}'s Status`}
                               leading={<FormRow.Icon style={styles.icon} source={ActivityForm} />}
                               onPress={() => {
-                                 Clipboard.setString(activityContent.state);
+                                 Clipboard.setString(`:${activityContent.emoji.name}: ${activityContent.state}`);
                                  Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
                               }}
                            />
@@ -176,7 +185,7 @@ const AccountInfo: Plugin = {
          const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
 
          return statusBool ? <>{res}</> : <Pressable onPress={() => {
-            Clipboard.setString(activityContent.state);
+            Clipboard.setString(`:${activityContent.emoji.name}: ${activityContent.state}`);
             Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
          }}>
             {res}
