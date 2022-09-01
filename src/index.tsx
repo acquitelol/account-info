@@ -1,5 +1,5 @@
 import { Constants, Moment, React, StyleSheet, Toasts } from 'enmity/metro/common';
-import { FormDivider, FormRow, Text, View } from 'enmity/components';
+import { FormDivider, FormRow, Text, View, Pressable } from 'enmity/components';
 import { Plugin, registerPlugin } from 'enmity/managers/plugins';
 import { getIDByName } from 'enmity/api/assets';
 import { bulk, filters, getByProps } from 'enmity/metro';
@@ -13,13 +13,17 @@ const [
    Members,
    Guilds,
    Router,
-   Clipboard
+   Clipboard,
+   AvatarHeader,
+   StatusHeader
 ] = bulk(
    filters.byDisplayName('UserProfileHeader', false),
    filters.byProps('getMember'),
    filters.byProps('getGuild'),
    filters.byProps('transitionToGuild'),
-   filters.byProps('setString')
+   filters.byProps('setString'),
+   filters.byName('HeaderAvatar', false),
+   filters.byName('HeaderStatus', false),
 );
 
 const Patcher = create('account-info');
@@ -33,8 +37,6 @@ const AccountInfo: Plugin = {
 
    onStart() {
       Patcher.instead(Header, 'default', (self, args, orig) => {
-         console.log(pfpBool)
-         console.log(statusBool)
          const [{ user, channel, type }] = args;
 
 
@@ -125,33 +127,64 @@ const AccountInfo: Plugin = {
                      />
                   </>}
                </View>
-               <Text style={styles.header}>
-                  Account Assets
-               </Text>
-               <View style={styles.information}>
-                  <FormRow
-                     label={`View ${user.username}'s Profile Picture`}
-                     leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
-                     onPress={() => {
-                        Router.openURL(url)
-                     }}
-                  />
-                  {activityContent && <>
-                        <FormDivider />
+               {pfpBool || statusBool ? <>
+                  <Text style={styles.header}>
+                     Account Assets
+                  </Text>
+                  <View style={styles.information}>
+                     {pfpBool && 
                         <FormRow
-                           label={`Copy ${user.username}'s Status`}
-                           leading={<FormRow.Icon style={styles.icon} source={ActivityForm} />}
+                           label={`View ${user.username}'s Profile Picture`}
+                           leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
                            onPress={() => {
-                              Clipboard.setString(activityContent.state);
-                              Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
+                              Router.openURL(url)
                            }}
                         />
-                     </>
-                  }
-               </View>
+                     }
+                     {pfpBool && statusBool && <FormDivider />}
+                     {activityContent && statusBool && <>
+                           <FormRow
+                              label={`Copy ${user.username}'s Status`}
+                              leading={<FormRow.Icon style={styles.icon} source={ActivityForm} />}
+                              onPress={() => {
+                                 Clipboard.setString(activityContent.state);
+                                 Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
+                              }}
+                           />
+                        </>
+                     }
+                  </View>
+               </> : ""}
             </View>
          </>;
       });
+
+      if(!pfpBool) {
+         Patcher.after(AvatarHeader, 'default', (_, [{ user }], res) => {
+            const image = user?.getAvatarURL?.(false, 4096, true);
+            if (!image) return res;
+
+            const discrim = user.discriminator % 5;
+            const url = typeof image === 'number' ? `https://cdn.discordapp.com/embed/avatars/${discrim}.png` : image?.replace('.webp', '.png');
+
+            return <Pressable onPress={() => Router.openURL(url)}>
+               {res}
+            </Pressable>;
+         });
+      }
+      if(!statusBool) {
+         Patcher.after(StatusHeader, 'default', (_, [{ user }], res) => {
+            const ActivityToast = getIDByName('pending-alert');
+            const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
+
+            return <Pressable onPress={() => {
+               Clipboard.setString(activityContent.state);
+               Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
+            }}>
+               {res}
+            </Pressable>;
+         });
+      }
    },
 
    onStop() {

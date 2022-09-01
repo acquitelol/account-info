@@ -41,8 +41,8 @@ export default ({ settings }: SettingsProps) => {
                 label='Profile Picture'
                 trailing={
                     <FormSwitch
-                        value={settings.getBoolean('pfpBtn', true)}
-                        onValueChange={() => settings.toggle('pfpBtn', true)}
+                        value={settings.getBoolean('pfpBtn', false)}
+                        onValueChange={() => settings.toggle('pfpBtn')}
                     />
                 }
             />
@@ -51,8 +51,8 @@ export default ({ settings }: SettingsProps) => {
                 label='Status'
                 trailing={
                     <FormSwitch
-                        value={settings.getBoolean('statusBtn', true)}
-                        onValueChange={() => settings.toggle('statusBtn', true)}
+                        value={settings.getBoolean('statusBtn', false)}
+                        onValueChange={() => settings.toggle('statusBtn')}
                     />
                 }
             />;
