@@ -7,7 +7,6 @@ import { create } from 'enmity/patcher';
 import manifest from '../manifest.json';
 import Settings from './components/Settings';
 import { getBoolean } from 'enmity/api/settings'
-import { stat } from 'fs';
 
 const [
    Header,
@@ -35,38 +34,6 @@ const AccountInfo: Plugin = {
    ...manifest,
 
    onStart() {
-      const nonDedicated = (which: number, pfpBool: boolean, statusBool: boolean) => {
-         switch(which) {
-            case 1: {
-               if(!pfpBool) {Patcher.after(AvatarHeader, 'default', (_, [{ user }], res) => {
-                  const image = user?.getAvatarURL?.(false, 4096, true);
-                  if (!image) return res;
-      
-                  const discrim = user.discriminator % 5;
-                  const url = typeof image === 'number' ? `https://cdn.discordapp.com/embed/avatars/${discrim}.png` : image?.replace('.webp', '.png');
-      
-                  return <Pressable onPress={() => Router.openURL(url)}>
-                     {res}
-                  </Pressable>;
-               })}
-            }
-            case 2: {
-               if(!statusBool) {
-                  Patcher.after(StatusHeader, 'default', (_, [{ user }], res) => {
-                     const ActivityToast = getIDByName('pending-alert');
-                     const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
-      
-                     return <Pressable onPress={() => {
-                        Clipboard.setString(activityContent.state);
-                        Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
-                     }}>
-                        {res}
-                     </Pressable>;
-                  });
-               }
-            }
-         }
-      }
       Patcher.instead(Header, 'default', (self, args, orig) => {
          let pfpBool = getBoolean("AccountInfo", 'pfpBtn')
          let statusBool = getBoolean("AccountInfo", "statusBtn")
@@ -210,8 +177,6 @@ const AccountInfo: Plugin = {
                   </View>
                </> : <></>}
             </View>
-            {nonDedicated(1, pfpBool, statusBool)}
-            {nonDedicated(2, pfpBool, statusBool)}
          </>;
       });
    },
