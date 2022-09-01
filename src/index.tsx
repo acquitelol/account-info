@@ -2,7 +2,7 @@ import { Constants, Moment, React, StyleSheet, Toasts } from 'enmity/metro/commo
 import { FormDivider, FormRow, Text, View } from 'enmity/components';
 import { Plugin, registerPlugin } from 'enmity/managers/plugins';
 import { getIDByName } from 'enmity/api/assets';
-import { bulk, filters } from 'enmity/metro';
+import { bulk, filters, getByProps } from 'enmity/metro';
 import { create } from 'enmity/patcher';
 import manifest from '../manifest.json';
 
@@ -10,15 +10,18 @@ const [
    Header,
    Members,
    Guilds,
-   Router
+   Router,
+   Clipboard
 ] = bulk(
    filters.byDisplayName('UserProfileHeader', false),
    filters.byProps('getMember'),
    filters.byProps('getGuild'),
-   filters.byProps('transitionToGuild')
+   filters.byProps('transitionToGuild'),
+   filters.byProps('setString')
 );
 
 const Patcher = create('account-info');
+const Activity = getByProps('getStatus', 'getState')
 
 const AccountInfo: Plugin = {
    ...manifest,
@@ -27,12 +30,6 @@ const AccountInfo: Plugin = {
       Patcher.instead(Header, 'default', (self, args, orig) => {
          const [{ user, channel, type }] = args;
 
-         try {
-            console.log(user.displayProfile.banner)
-            console.log(user.displayProfile.bio)
-         } catch {
-            console.log('Some error happened')
-         }
 
          if (type !== 0) {
             return orig.apply(self, args);
@@ -67,6 +64,8 @@ const AccountInfo: Plugin = {
          });
 
          const Pfp = getIDByName('img_nitro_profile_banner');
+         const ActivityToast = getIDByName('rejected-alert');
+         const ActivityForm = getIDByName('toast_copy_link');
          const Add = getIDByName('ic_header_members_add_24px');
          const Joined = getIDByName('ic_leave_24px');
 
@@ -74,11 +73,13 @@ const AccountInfo: Plugin = {
          const member = isGuild && Members.getMember(channel.guild_id, user.id);
          const guild = isGuild && Guilds.getGuild(channel.guild_id);
 
-         const image = user?.getAvatarURL?.(false, 4096, true);
+         const image = isGuild ? member?.getAvatarURL?.(false, 4096, true) || user?.getAvatarURL?.(false, 4096, true) : user?.getAvatarURL?.(false, 4096, true);
          if (!image) return orig.apply(self, args);
 
          const discrim = user.discriminator % 5;
          const url = typeof image === 'number' ? `https://cdn.discordapp.com/embed/avatars/${discrim}.png` : image?.replace('.webp', '.png');
+
+         const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
 
          return <>
             {orig.apply(self, args)}
@@ -128,6 +129,18 @@ const AccountInfo: Plugin = {
                         Router.openURL(url)
                      }}
                   />
+                  {activityContent && <>
+                        <FormDivider />
+                        <FormRow
+                           label={`Copy ${user.username}'s Status`}
+                           leading={<FormRow.Icon style={styles.icon} source={ActivityForm} />}
+                           onPress={() => {
+                              Clipboard.setString(activityContent);
+                              Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
+                           }}
+                        />
+                     </>
+                  }
                </View>
             </View>
          </>;
