@@ -15,7 +15,7 @@ export default ({ settings }: SettingsProps) => {
                 trailing={
                     <FormSwitch
                         value={settings.getBoolean('pfpBtn', false)}
-                        onValueChange={() => settings.toggle('pfpBtn')}
+                        onValueChange={() => settings.toggle('pfpBtn', false)}
                     />
                 }
             />
@@ -25,7 +25,7 @@ export default ({ settings }: SettingsProps) => {
                 trailing={
                     <FormSwitch
                         value={settings.getBoolean('statusBtn', false)}
-                        onValueChange={() => settings.toggle('statusBtn')}
+                        onValueChange={() => settings.toggle('statusBtn', false)}
                     />
                 }
             />

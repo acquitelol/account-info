@@ -29,8 +29,8 @@ const [
 const Patcher = create('account-info');
 const Activity = getByProps('getStatus', 'getState')
 
-let pfpBool = getBoolean("AccountInfo", 'pfpBtn', true)
-let statusBool = getBoolean("AccountInfo", "statusBtn", true)
+let pfpBool = getBoolean("AccountInfo", 'pfpBtn', false)
+let statusBool = getBoolean("AccountInfo", "statusBtn", false)
 
 const AccountInfo: Plugin = {
    ...manifest,
