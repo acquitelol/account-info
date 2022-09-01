@@ -28,8 +28,8 @@ const AccountInfo: Plugin = {
          const [{ user, channel, type }] = args;
 
          console.log(args[0])
-         console.log(args[0].banner)
-         console.log(args[0].bio)
+         console.log(args[0][0][2])
+         console.log(args[0][0][3])
 
          if (type !== 0) {
             return orig.apply(self, args);
