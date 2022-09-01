@@ -23,20 +23,20 @@ const [
    filters.byProps('transitionToGuild'),
    filters.byProps('setString'),
    filters.byName('HeaderAvatar', false),
-   filters.byName('HeaderStatus', false),
+   filters.byName('ProfileStatus', false),
 );
 
 const Patcher = create('account-info');
 const Activity = getByProps('getStatus', 'getState')
 
-let pfpBool = getBoolean("AccountInfo", 'pfpBtn', false)
-let statusBool = getBoolean("AccountInfo", "statusBtn", false)
 
 const AccountInfo: Plugin = {
    ...manifest,
 
    onStart() {
       Patcher.instead(Header, 'default', (self, args, orig) => {
+         let pfpBool = getBoolean("AccountInfo", 'pfpBtn', false)
+         let statusBool = getBoolean("AccountInfo", "statusBtn", false)
          const [{ user, channel, type }] = args;
 
 
@@ -90,6 +90,33 @@ const AccountInfo: Plugin = {
 
          const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
 
+         if(!pfpBool) {
+            Patcher.after(AvatarHeader, 'default', (_, [{ user }], res) => {
+               const image = user?.getAvatarURL?.(false, 4096, true);
+               if (!image) return res;
+   
+               const discrim = user.discriminator % 5;
+               const url = typeof image === 'number' ? `https://cdn.discordapp.com/embed/avatars/${discrim}.png` : image?.replace('.webp', '.png');
+   
+               return <Pressable onPress={() => Router.openURL(url)}>
+                  {res}
+               </Pressable>;
+            });
+         }
+         if(!statusBool) {
+            Patcher.after(StatusHeader, 'default', (_, [{ user }], res) => {
+               const ActivityToast = getIDByName('pending-alert');
+               const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
+   
+               return <Pressable onPress={() => {
+                  Clipboard.setString(activityContent.state);
+                  Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
+               }}>
+                  {res}
+               </Pressable>;
+            });
+         }
+
          return <>
             {orig.apply(self, args)}
             <View style={styles.container}>
@@ -127,7 +154,7 @@ const AccountInfo: Plugin = {
                      />
                   </>}
                </View>
-               {pfpBool || statusBool ? <>
+               {(pfpBool || statusBool) ? <>
                   <Text style={styles.header}>
                      Account Assets
                   </Text>
@@ -158,33 +185,6 @@ const AccountInfo: Plugin = {
             </View>
          </>;
       });
-
-      if(!pfpBool) {
-         Patcher.after(AvatarHeader, 'default', (_, [{ user }], res) => {
-            const image = user?.getAvatarURL?.(false, 4096, true);
-            if (!image) return res;
-
-            const discrim = user.discriminator % 5;
-            const url = typeof image === 'number' ? `https://cdn.discordapp.com/embed/avatars/${discrim}.png` : image?.replace('.webp', '.png');
-
-            return <Pressable onPress={() => Router.openURL(url)}>
-               {res}
-            </Pressable>;
-         });
-      }
-      if(!statusBool) {
-         Patcher.after(StatusHeader, 'default', (_, [{ user }], res) => {
-            const ActivityToast = getIDByName('pending-alert');
-            const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
-
-            return <Pressable onPress={() => {
-               Clipboard.setString(activityContent.state);
-               Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
-            }}>
-               {res}
-            </Pressable>;
-         });
-      }
    },
 
    onStop() {
