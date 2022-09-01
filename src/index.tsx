@@ -7,6 +7,7 @@ import { create } from 'enmity/patcher';
 import manifest from '../manifest.json';
 import Settings from './components/Settings';
 import { getBoolean } from 'enmity/api/settings'
+import { stat } from 'fs';
 
 const [
    Header,
@@ -132,27 +133,17 @@ const AccountInfo: Plugin = {
                      Account Assets
                   </Text>
                   <View style={styles.information}>
-                     {pfpBool ? 
+                     {pfpBool &&
                         <FormRow
                            label={`View ${user.username}'s Profile Picture`}
                            leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
                            onPress={() => {
                               Router.openURL(url)
                            }}
-                        /> : Patcher.after(AvatarHeader, 'default', (_, [{ user }], res) => {
-                           const image = user?.getAvatarURL?.(false, 4096, true);
-                           if (!image) return res;
-               
-                           const discrim = user.discriminator % 5;
-                           const url = typeof image === 'number' ? `https://cdn.discordapp.com/embed/avatars/${discrim}.png` : image?.replace('.webp', '.png');
-               
-                           return <Pressable onPress={() => Router.openURL(url)}>
-                              {res}
-                           </Pressable>;
-                        })
+                        />
                      }
                      {pfpBool && statusBool && <FormDivider />}
-                     {activityContent ? statusBool ? <>
+                     {activityContent && statusBool && <>
                            <FormRow
                               label={`Copy ${user.username}'s Status`}
                               leading={<FormRow.Icon style={styles.icon} source={ActivityForm} />}
@@ -161,24 +152,39 @@ const AccountInfo: Plugin = {
                                  Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
                               }}
                            />
-                        </> : Patcher.after(StatusHeader, 'default', (_, [{ user }], res) => {
-                                 const ActivityToast = getIDByName('pending-alert');
-                                 const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
-                  
-                                 return <Pressable onPress={() => {
-                                    Clipboard.setString(activityContent.state);
-                                    Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
-                                 }}>
-                                    {res}
-                                 </Pressable>;
-                              })
-                        : <></>
+                        </>
                      }
                   </View>
                </> : <></>}
             </View>
          </>;
       });
+
+      Patcher.after(AvatarHeader, 'default', (_, [{ user }], res) => {
+         let pfpBool = getBoolean("AccountInfo", 'pfpBtn', false)
+         const image = user?.getAvatarURL?.(false, 4096, true);
+         if (!image) return res;
+
+         const discrim = user.discriminator % 5;
+         const url = typeof image === 'number' ? `https://cdn.discordapp.com/embed/avatars/${discrim}.png` : image?.replace('.webp', '.png');
+
+         return pfpBool ? <Pressable onPress={() => Router.openURL(url)}>
+            {res}
+         </Pressable> : <></>;
+      })
+
+      Patcher.after(StatusHeader, 'default', (_, [{ user }], res) => {
+         let statusBool = getBoolean("AccountInfo", "statusBtn", false)
+         const ActivityToast = getIDByName('pending-alert');
+         const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
+
+         return statusBool ? <Pressable onPress={() => {
+            Clipboard.setString(activityContent.state);
+            Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
+         }}>
+            {res}
+         </Pressable> : <></>;
+      })
    },
 
    onStop() {
