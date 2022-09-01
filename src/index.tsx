@@ -154,7 +154,7 @@ const AccountInfo: Plugin = {
                         </>
                      }
                   </View>
-               </> : ""}
+               </> : <></>}
             </View>
          </>;
       });
