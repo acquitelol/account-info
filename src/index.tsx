@@ -170,7 +170,7 @@ const AccountInfo: Plugin = {
 
          return pfpBool ? <Pressable onPress={() => Router.openURL(url)}>
             {res}
-         </Pressable> : <></>;
+         </Pressable> : <>{res}</>;
       })
 
       Patcher.after(StatusHeader, 'default', (_, [{ user }], res) => {
@@ -183,7 +183,7 @@ const AccountInfo: Plugin = {
             Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
          }}>
             {res}
-         </Pressable> : <></>;
+         </Pressable> : <>{res}</>;
       })
    },
 
