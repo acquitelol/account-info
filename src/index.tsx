@@ -28,12 +28,12 @@ const AccountInfo: Plugin = {
          const [{ user, channel, type }] = args;
 
          try {
-            console.log(user.banner)
-            console.log(user.bio)
+            console.log(user.displayProfile.banner)
+            console.log(user.displayProfile.bio)
          } catch {
             console.log('Some error happened')
          }
-         
+
          if (type !== 0) {
             return orig.apply(self, args);
          }
