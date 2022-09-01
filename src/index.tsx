@@ -7,7 +7,6 @@ import { create } from 'enmity/patcher';
 import manifest from '../manifest.json';
 import Settings from './components/Settings';
 import { getBoolean } from 'enmity/api/settings'
-import { stat } from 'fs';
 
 const [
    Header,
@@ -27,7 +26,7 @@ const [
 
 const Patcher = create('account-info');
 const Activity = getByProps('getStatus', 'getState')
-
+const ActivityHeader = getByProps('customStatusActivity')
 
 const AccountInfo: Plugin = {
    ...manifest,
@@ -166,23 +165,23 @@ const AccountInfo: Plugin = {
          const discrim = user.discriminator % 5;
          const url = typeof image === 'number' ? `https://cdn.discordapp.com/embed/avatars/${discrim}.png` : image?.replace('.webp', '.png');
 
-         return pfpBool ? <Pressable onPress={() => Router.openURL(url)}>
+         return pfpBool ? <>{res}</> :<Pressable onPress={() => Router.openURL(url)}>
             {res}
-         </Pressable> : <>{res}</>;
+         </Pressable>;
       })
 
-      // Patcher.after(StatusHeader, 'default', (_, [{ user }], res) => {
-      //    let statusBool = getBoolean("AccountInfo", "statusBtn", false)
-      //    const ActivityToast = getIDByName('pending-alert');
-      //    const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
+      Patcher.after(ActivityHeader, 'default', (_, [{ user }], res) => {
+         let statusBool = getBoolean("AccountInfo", "statusBtn", false)
+         const ActivityToast = getIDByName('pending-alert');
+         const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
 
-      //    return statusBool ? <Pressable onPress={() => {
-      //       Clipboard.setString(activityContent.state);
-      //       Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
-      //    }}>
-      //       {res}
-      //    </Pressable> : <>{res}</>;
-      // })
+         return statusBool ? <>{res}</> : <Pressable onPress={() => {
+            Clipboard.setString(activityContent.state);
+            Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
+         }}>
+            {res}
+         </Pressable>;
+      })
    },
 
    onStop() {
