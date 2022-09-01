@@ -27,10 +27,11 @@ const AccountInfo: Plugin = {
       Patcher.instead(Header, 'default', (self, args, orig) => {
          const [{ user, channel, type }] = args;
 
-         console.log(args[0])
-         console.log(args[0][0][2])
-         console.log(args[0][0][3])
+         const [{displayProfile}] = user;
+         const [{banner, bio}] = displayProfile;
 
+         console.log(banner)
+         console.log(bio)
          if (type !== 0) {
             return orig.apply(self, args);
          }
