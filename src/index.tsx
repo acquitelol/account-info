@@ -124,8 +124,6 @@ const AccountInfo: Plugin = {
          
          return <>
             {orig.apply(self, args)}
-            {nonDedicated(1, pfpBool, statusBool)}
-            {nonDedicated(2, pfpBool, statusBool)}
             <View style={styles.container}>
                <Text style={styles.header}>
                   Account Information
@@ -190,6 +188,8 @@ const AccountInfo: Plugin = {
                   </View>
                </> : <></>}
             </View>
+            {nonDedicated(1, pfpBool, statusBool)}
+            {nonDedicated(2, pfpBool, statusBool)}
          </>;
       });
    },
