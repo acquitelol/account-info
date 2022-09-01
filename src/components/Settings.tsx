@@ -1,4 +1,4 @@
-import { FormDivider, FormRow, Text, ScrollView, FormSwitch, Form } from 'enmity/components';
+import { FormDivider, FormRow, ScrollView, FormSwitch, Form, FormSection } from 'enmity/components';
 import { SettingsStore } from 'enmity/api/settings';
 import { React, StyleSheet, Constants } from 'enmity/metro/common';
 
@@ -36,28 +36,27 @@ export default ({ settings }: SettingsProps) => {
      });
    return <>
     <ScrollView style={styles.container}>
-        <Text style={styles.header}>
-            Enable Dedicated Buttons
-        </Text>
-        <FormRow
-        label='Profile Picture'
-        trailing={
-            <FormSwitch
-                value={settings.getBoolean('pfpBtn', true)}
-                onValueChange={() => settings.toggle('pfpBtn', true)}
+        <FormSection title="Enable Dedicated Buttons">
+            <FormRow
+                label='Profile Picture'
+                trailing={
+                    <FormSwitch
+                        value={settings.getBoolean('pfpBtn', true)}
+                        onValueChange={() => settings.toggle('pfpBtn', true)}
+                    />
+                }
             />
-        }
-        />;
-        <FormDivider />
-        <FormRow
-        label='Status'
-        trailing={
-            <FormSwitch
-                value={settings.getBoolean('statusBtn', true)}
-                onValueChange={() => settings.toggle('statusBtn', true)}
-            />
-        }
-        />;
+            <FormDivider />
+            <FormRow
+                label='Status'
+                trailing={
+                    <FormSwitch
+                        value={settings.getBoolean('statusBtn', true)}
+                        onValueChange={() => settings.toggle('statusBtn', true)}
+                    />
+                }
+            />;
+        </FormSection>
     </ScrollView>
    </>
 };
