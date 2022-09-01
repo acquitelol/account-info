@@ -27,10 +27,10 @@ const AccountInfo: Plugin = {
       Patcher.instead(Header, 'default', (self, args, orig) => {
          const [{ user, channel, type }] = args;
 
-         console.log(user)
-         console.log(args)
-         console.log(self)
-         
+         console.log(args[0])
+         console.log(args[0].banner)
+         console.log(args[0].bio)
+
          if (type !== 0) {
             return orig.apply(self, args);
          }
@@ -71,7 +71,7 @@ const AccountInfo: Plugin = {
          const member = isGuild && Members.getMember(channel.guild_id, user.id);
          const guild = isGuild && Guilds.getGuild(channel.guild_id);
 
-         const image = isGuild ? member?.getAvatarURL?.(false, 4096, true) : user?.getAvatarURL?.(false, 4096, true);
+         const image = user?.getAvatarURL?.(false, 4096, true);
          if (!image) return orig.apply(self, args);
 
          const discrim = user.discriminator % 5;
