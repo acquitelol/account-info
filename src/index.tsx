@@ -35,8 +35,8 @@ const AccountInfo: Plugin = {
 
    onStart() {
       Patcher.instead(Header, 'default', (self, args, orig) => {
-         let pfpBool = getBoolean("AccountInfo", 'pfpBtn')
-         let statusBool = getBoolean("AccountInfo", "statusBtn")
+         let pfpBool = getBoolean("AccountInfo", 'pfpBtn', false)
+         let statusBool = getBoolean("AccountInfo", "statusBtn", false)
          const [{ user, channel, type }] = args;
 
 
