@@ -5,6 +5,8 @@ import { getIDByName } from 'enmity/api/assets';
 import { bulk, filters, getByProps } from 'enmity/metro';
 import { create } from 'enmity/patcher';
 import manifest from '../manifest.json';
+import Settings from './components/Settings';
+import { getBoolean } from 'enmity/api/settings'
 
 const [
    Header,
@@ -22,13 +24,17 @@ const [
 
 const Patcher = create('account-info');
 const Activity = getByProps('getStatus', 'getState')
-const Bio = getByProps('')
+
+let pfpBool = getBoolean("AccountInfo", 'pfpBtn', true)
+let statusBool = getBoolean("AccountInfo", "statusBtn", true)
 
 const AccountInfo: Plugin = {
    ...manifest,
 
    onStart() {
       Patcher.instead(Header, 'default', (self, args, orig) => {
+         console.log(pfpBool)
+         console.log(statusBool)
          const [{ user, channel, type }] = args;
 
 
@@ -124,7 +130,7 @@ const AccountInfo: Plugin = {
                </Text>
                <View style={styles.information}>
                   <FormRow
-                     label={`${user.username}'s ${isGuild ? "Server" : ""} Profile Picture`}
+                     label={`View ${user.username}'s Profile Picture`}
                      leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
                      onPress={() => {
                         Router.openURL(url)
@@ -150,6 +156,10 @@ const AccountInfo: Plugin = {
 
    onStop() {
       Patcher.unpatchAll();
+   },
+
+   getSettingsPanel({ settings }) {
+      return <Settings settings={settings} />;
    },
 };
 
