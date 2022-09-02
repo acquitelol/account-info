@@ -23,7 +23,7 @@ const [
    filters.byProps('transitionToGuild'),
    filters.byProps('setString'),
    filters.byName('HeaderAvatar', false),
-   filters.byProps('customStatusActivity')
+   filters.byProps('customStatusActivity') && filters.byDisplayName('pe', false)
 );
 
 const Patcher = create('account-info');
