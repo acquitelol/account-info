@@ -187,20 +187,14 @@ const AccountInfo: Plugin = {
          let statusBool = getBoolean("AccountInfo", "statusBtn", false)
          const ActivityToast = getIDByName('pending-alert');
          const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
-         
-         const styles = StyleSheet.createThemedStyleSheet({
-            pressable: {
-               height: "20%",
-               backgroundColor: 'rgba(0,0,0,0)',
-            }
-         });
+
 
          return statusBool ? <>{res}</> : 
          <>
             <Pressable onPress={() => {
                Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
                Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
-            }} style={styles.pressable}>{res}</Pressable>
+            }}>{res}</Pressable>
          </>
          
       })
