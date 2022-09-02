@@ -190,16 +190,15 @@ const AccountInfo: Plugin = {
          const statusElem = findInReactTree(res, e => e?.props?.customStatusActivity)
          Patcher.after(statusElem, 'type', (_, args, res) => {
             let statusBool = getBoolean("AccountInfo", "statusBtn", false)
-            console.log(args)
-            // const ActivityToast = getIDByName('pending-alert');
-            // const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
+            const ActivityToast = getIDByName('pending-alert');
+            const activityContent = args[0].find(ac => ac.type === 4)
 
-            // return statusBool ? <>{res}</> : <>
-            //    <Pressable onPress={() => {
-            //       Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
-            //       Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
-            //    }}>{res}</Pressable>
-            // </>;
+            return statusBool ? <>{res}</> : <>
+               <Pressable onPress={() => {
+                  Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
+                  Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
+               }}>{res}</Pressable>
+            </>;
          })
             
          unpatch();
