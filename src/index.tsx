@@ -43,8 +43,7 @@ const AccountInfo: Plugin = {
 		   let masterDisableBool = getBoolean("AccountInfo", "masterDisable", false)
 
          const [{ user, channel, type }] = args;
-
-         console.log(args[0].displayProfile.banner)
+         let bannerHash = args[0].displayProfile.banner;
          
          if (type !== 0) {
             return orig.apply(self, args);
@@ -76,6 +75,9 @@ const AccountInfo: Plugin = {
             icon: {
                color: Constants.ThemeColorMap.INTERACTIVE_NORMAL,
             },
+            switchArrow: {
+               marginRight: 15.5
+            }
          });
 
          const Pfp = getIDByName('img_nitro_profile_banner');
@@ -147,19 +149,20 @@ const AccountInfo: Plugin = {
                         <FormRow
                            label={`View ${user.username}'s Profile Picture`}
                            leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
-                           // trailing={<>
-                           //    <FormSwitch
-                           //       value={getBoolean("AccountInfo", 'pfpBtn', true)}
-                           //       onValueChange={bannerHash ? () => {
-                           //          toggle("AccountInfo", 'pfpBtn', true)
-                           //          Toasts.open({ content: `Switched to ${getBoolean('AccountInfo', 'pfpBtn', true) ? 'banner' : 'profile picture'} link.`, source: Pfp })
-                           //       } : () => {}}
-                           //    />
-                           //    {FormRow.Arrow}
-                           // </>}
-                           // onPress={() => {
-                           //    getBoolean("AccountInfo", 'pfpBtn', true) ? Router.openURL(url) : Router.openURL(`https://cdn.discordapp.com/banners/${user.id}/${bannerHash}.png?size=4096`)
-                           // }}
+                           trailing={<>
+                              <FormSwitch
+                                 value={getBoolean("AccountInfo", 'pfpBtn', true)}
+                                 onValueChange={bannerHash ? () => {
+                                    toggle("AccountInfo", 'pfpBtn', true)
+                                    Toasts.open({ content: `Switched to ${getBoolean('AccountInfo', 'pfpBtn', true) ? 'banner' : 'profile picture'} link.`, source: Pfp })
+                                 } : () => {}}
+                                 style={styles.switchArrow}
+                              />
+                              {FormRow.Arrow}
+                           </>}
+                           onPress={() => {
+                              getBoolean("AccountInfo", 'pfpBtn', true) ? Router.openURL(url) : Router.openURL(`https://cdn.discordapp.com/banners/${user.id}/${bannerHash}.png?size=4096`)
+                           }}
                         />
                      }
                      {pfpBool && statusBool && <FormDivider />}
