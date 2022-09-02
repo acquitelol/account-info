@@ -32,7 +32,6 @@ const AccountInfo: Plugin = {
    ...manifest,
 
    onStart() {
-      const StatusHeader = findInReactTree(Header, e => e?.props?.customStatusActivity)
       Patcher.instead(Header, 'default', (self, args, orig) => {
          let pfpBool = getBoolean("AccountInfo", 'pfpBtn', false)
          let statusBool = getBoolean("AccountInfo", "statusBtn", false)
@@ -184,7 +183,7 @@ const AccountInfo: Plugin = {
 	  /*   EXPERIMENTAL (doesnt work)  */
 	  /* ===============------------- */
 
-      Patcher.after(StatusHeader, 'default', (_, [{ user }], res) => {
+      Patcher.after(findInReactTree(Header, e => e?.props?.customStatusActivity), 'default', (_, [{ user }], res) => {
          let statusBool = getBoolean("AccountInfo", "statusBtn", false)
          const ActivityToast = getIDByName('pending-alert');
          const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
