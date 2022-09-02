@@ -178,7 +178,7 @@ const AccountInfo: Plugin = {
          </Pressable>;
       })
 
-      Patcher.after(Activity, 'default', (_, [{ user }], res) => {
+      Patcher.after(Activity, 'render', (_, [{ user }], res) => {
          let statusBool = getBoolean("AccountInfo", "statusBtn", false)
          const ActivityToast = getIDByName('pending-alert');
          const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)

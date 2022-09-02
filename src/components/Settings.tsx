@@ -28,13 +28,13 @@ export default ({ settings }: SettingsProps) => {
             />
             <FormDivider />
             <FormRow
-                label='Time of Join Server'
+                label='Time of Joining Server'
                 trailing={
                     <FormSwitch
                         value={settings.getBoolean('joinBtn', true)}
                         onValueChange={() => {
                                 settings.toggle('joinBtn', true)
-                                Toasts.open({ content: 'Toggled Status Button', source: toastTrail });
+                                Toasts.open({ content: 'Toggled Time of Joining Server', source: toastTrail });
                             }
                         }
                     />
