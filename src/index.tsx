@@ -23,7 +23,7 @@ const [
    filters.byProps('transitionToGuild'),
    filters.byProps('setString'),
    filters.byName('HeaderAvatar', false),
-   filters.byProps('customStatusActivity') && filters.byDisplayName('pe', false)
+   filters.byName('pe', false)
 );
 
 const Patcher = create('account-info');
@@ -35,7 +35,7 @@ const AccountInfo: Plugin = {
    onStart() {
 
       Patcher.instead(Header, 'default', (self, args, orig) => {
-         console.log(StatusHeader)
+         console.log(StatusHeader.props.customStatusActivity)
 
          let pfpBool = getBoolean("AccountInfo", 'pfpBtn', false)
          let statusBool = getBoolean("AccountInfo", "statusBtn", false)
