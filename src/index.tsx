@@ -27,7 +27,7 @@ const [
 
 const Patcher = create('account-info');
 const Activity = getByProps('getStatus', 'getState')
-const StatusHeader = findInReactTree(Header, getByName('pe'))
+const StatusHeader = findInReactTree(Header, e => e?.props?.customStatusActivity)
 
 const AccountInfo: Plugin = {
    ...manifest,
