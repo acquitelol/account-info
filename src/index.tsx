@@ -150,15 +150,16 @@ const AccountInfo: Plugin = {
                            label={`View ${user.username}'s Profile Picture`}
                            leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
                            trailing={<>
+                              {FormRow.Arrow}
                               <FormSwitch
-                                 value={getBoolean("AccountInfo", 'pfpBtn', true)}
+                                 value={getBoolean("AccountInfo", 'pfpToggle', true)}
                                  onValueChange={bannerHash ? () => {
-                                    toggle("AccountInfo", 'pfpBtn', true)
-                                    Toasts.open({ content: `Switched to ${getBoolean('AccountInfo', 'pfpBtn', true) ? 'banner' : 'profile picture'} link.`, source: Pfp })
+                                    toggle("AccountInfo", 'pfpToggle', true)
+                                    Toasts.open({ content: `Switched to ${getBoolean('AccountInfo', 'pfpToggle', true) ? 'banner' : 'profile picture'} link.`, source: Pfp })
                                  } : () => {}}
                                  style={styles.switchArrow}
                               />
-                              {FormRow.Arrow}
+                              
                            </>}
                            onPress={() => {
                               getBoolean("AccountInfo", 'pfpBtn', true) ? Router.openURL(url) : Router.openURL(`https://cdn.discordapp.com/banners/${user.id}/${bannerHash}.png?size=4096`)
