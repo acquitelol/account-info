@@ -78,7 +78,7 @@ export default ({ settings }: SettingsProps) => {
                         value={settings.getBoolean('masterDisable', false)}
                         onValueChange={() => {
                                 settings.toggle('masterDisable', false)
-                                Toasts.open({ content: `Successfully ${settings.getBoolean('masterDisable', false) ? 'disabled' : 'enabled'} AccountInfo}`, source: toastTrail });
+                                Toasts.open({ content: `Successfully ${settings.getBoolean('masterDisable', false) ? 'disabled' : 'enabled'} AccountInfo`, source: toastTrail });
                             }
                         }
                     />
