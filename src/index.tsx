@@ -195,6 +195,7 @@ const AccountInfo: Plugin = {
 
          return statusBool ? <>{res}</> : 
          <>
+            {res}
             <Pressable onPress={() => {
                Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
                Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
