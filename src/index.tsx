@@ -195,7 +195,7 @@ const AccountInfo: Plugin = {
          const styles = StyleSheet.createThemedStyleSheet({
             container: {
                marginLeft: 15.5,
-               marginTop: -5,
+               marginTop: -50,
             },
          });
 
