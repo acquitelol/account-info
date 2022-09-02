@@ -180,18 +180,22 @@ const AccountInfo: Plugin = {
          </Pressable>;
       })
 
-      Patcher.after(ActivityHeader, 'render', (_, [{ user }], res) => {
-         let statusBool = getBoolean("AccountInfo", "statusBtn", false)
-         const ActivityToast = getIDByName('pending-alert');
-         const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
+	  /* ===============------------- */
+	  /*   EXPERIMENTAL (doesnt work)  */
+	  /* ===============------------- */
 
-         return statusBool ? <>{res}</> : <Pressable onPress={() => {
-            Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
-            Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
-         }}>
-            {res}
-         </Pressable>;
-      })
+    //   Patcher.after(ActivityHeader, 'render', (_, [{ user }], res) => {
+    //      let statusBool = getBoolean("AccountInfo", "statusBtn", false)
+    //      const ActivityToast = getIDByName('pending-alert');
+    //      const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
+
+    //      return statusBool ? <>{res}</> : <Pressable onPress={() => {
+    //         Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
+    //         Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
+    //      }}>
+    //         {res}
+    //      </Pressable>;
+    //   })
    },
 
    onStop() {
