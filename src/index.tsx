@@ -44,7 +44,7 @@ const AccountInfo: Plugin = {
 
          const [{ user, channel, type }] = args;
 
-         console.log(args)
+         console.log(args[0].displayProfile.banner)
          
          if (type !== 0) {
             return orig.apply(self, args);
