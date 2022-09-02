@@ -45,7 +45,7 @@ export default ({ settings }: SettingsProps) => {
             <FormDivider />
             <FormRow
                 label='Time of Joining Server'
-                subLabel='Show when an account joined a server (if opened in it)'
+                subLabel='Show when an account joined a server'
                 leading={<FormRow.Icon style={styles.icon} source={getIDByName('ic_leave_24px')} />}
                 trailing={
                     <FormSwitch
@@ -63,7 +63,7 @@ export default ({ settings }: SettingsProps) => {
         <FormSection title="Enable Dedicated Buttons">
             <FormRow
                 label='Profile Picture'
-                subLabel="Show dedicated button to view a user's Profile Picture."
+                subLabel="Show dedicated button to view a user's PFP."
                 leading={<FormRow.Icon style={styles.icon} source={getIDByName('img_nitro_profile_banner')} />}
                 trailing={
                     <FormSwitch

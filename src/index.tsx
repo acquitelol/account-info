@@ -142,8 +142,8 @@ const AccountInfo: Plugin = {
                      {pfpBool &&
                         <FormRow
                            label={`View ${user.username}'s Profile Picture`}
-                           subLabel="Opens a window externally."
                            leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
+                           trailing={<FormRow.Icon style={styles.icon} source={getIDByName('ic_upload_24px')} />}
                            onPress={() => {
                               Router.openURL(url)
                            }}
@@ -153,8 +153,8 @@ const AccountInfo: Plugin = {
                      {activityContent && statusBool && <>
                            <FormRow
                               label={`Copy ${user.username}'s Status`}
-                              subLabel="Copies the status to clipboard."
                               leading={<FormRow.Icon style={styles.icon} source={ActivityForm} />}
+                              trailing={<FormRow.Icon style={styles.icon} source={getIDByName('ic_select_all_24px')} />}
                               onPress={() => {
                                  Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
                                  Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
@@ -182,7 +182,7 @@ const AccountInfo: Plugin = {
       })
 
 	  /* ===============------------- */
-	  /*   EXPERIMENTAL (doesnt work)  */
+	  /*   EXPERIMENTAL (doesnt work as expected)  */
 	  /* ===============------------- */
 
       Patcher.after(Header, 'default', (_, [{ user }], res) => {
