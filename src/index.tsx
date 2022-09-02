@@ -23,7 +23,6 @@ const [
    filters.byProps('transitionToGuild'),
    filters.byProps('setString'),
    filters.byName('HeaderAvatar', false),
-   filters.byProps('customStatusActivity')
 );
 
 const Patcher = create('account-info');
@@ -35,7 +34,7 @@ const AccountInfo: Plugin = {
    onStart() {
 
       Patcher.instead(Header, 'default', (self, args, orig) => {
-         console.log(Header[0])
+         console.log(self)
 
          let pfpBool = getBoolean("AccountInfo", 'pfpBtn', false)
          let statusBool = getBoolean("AccountInfo", "statusBtn", false)
@@ -187,18 +186,19 @@ const AccountInfo: Plugin = {
 	  /*   EXPERIMENTAL (doesnt work)  */
 	  /* ===============------------- */
 
-    //   Patcher.after(ActivityHeader, 'render', (_, [{ user }], res) => {
-    //      let statusBool = getBoolean("AccountInfo", "statusBtn", false)
-    //      const ActivityToast = getIDByName('pending-alert');
-    //      const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
+      Patcher.after(Header, 'default', (_, [{ user }], res) => {
+         let statusBool = getBoolean("AccountInfo", "statusBtn", false)
+         console.log(res)
+         const ActivityToast = getIDByName('pending-alert');
+         const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
 
-    //      return statusBool ? <>{res}</> : <Pressable onPress={() => {
-    //         Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
-    //         Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
-    //      }}>
-    //         {res}
-    //      </Pressable>;
-    //   })
+         return statusBool ? <>{res}</> : <Pressable onPress={() => {
+            Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
+            Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
+         }}>
+            {res}
+         </Pressable>;
+      })
    },
 
    onStop() {
