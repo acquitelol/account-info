@@ -29,6 +29,7 @@ export default ({ settings }: SettingsProps) => {
         <FormSection title="Enable Account Date Information">
             <FormRow
                 label='Time of Creation'
+                leading={<FormRow.Icon style={styles.icon} source={getIDByName('ic_header_members_add_24px')} />}
                 trailing={
                     <FormSwitch
                         value={settings.getBoolean('createBtn', true)}
@@ -43,6 +44,7 @@ export default ({ settings }: SettingsProps) => {
             <FormDivider />
             <FormRow
                 label='Time of Joining Server'
+                leading={<FormRow.Icon style={styles.icon} source={getIDByName('ic_leave_24px')} />}
                 trailing={
                     <FormSwitch
                         value={settings.getBoolean('joinBtn', true)}
@@ -59,6 +61,7 @@ export default ({ settings }: SettingsProps) => {
         <FormSection title="Enable Dedicated Buttons">
             <FormRow
                 label='Profile Picture'
+                leading={<FormRow.Icon style={styles.icon} source={getIDByName('img_nitro_profile_banner')} />}
                 trailing={
                     <FormSwitch
                         value={settings.getBoolean('pfpBtn', false)}
@@ -73,6 +76,7 @@ export default ({ settings }: SettingsProps) => {
             <FormDivider />
             <FormRow
                 label='Status'
+                leading={<FormRow.Icon style={styles.icon} source={getIDByName('ic_passport_24px')} />}
                 trailing={
                     <FormSwitch
                         value={settings.getBoolean('statusBtn', false)}
