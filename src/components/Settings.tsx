@@ -62,15 +62,15 @@ export default ({ settings }: SettingsProps) => {
         <FormDivider />
         <FormSection title="Enable Dedicated Buttons">
             <FormRow
-                label='Profile Picture'
-                subLabel="Show dedicated button to view a user's PFP."
+                label="Assets"
+                subLabel="Show dedicated button to view account assets."
                 leading={<FormRow.Icon style={styles.icon} source={getIDByName('img_nitro_profile_banner')} />}
                 trailing={
                     <FormSwitch
                         value={settings.getBoolean('pfpBtn', false)}
                         onValueChange={() => {
                                 settings.toggle('pfpBtn', false)
-                                Toasts.open({ content: `Successfully ${settings.getBoolean('pfpBtn', false) ? 'enabled' : 'disabled'} dedicated PFP Button.`, source: toastTrail })
+                                Toasts.open({ content: `Successfully ${settings.getBoolean('pfpBtn', false) ? 'enabled' : 'disabled'} dedicated Assets Button.`, source: toastTrail })
                             }
                         }
                     />

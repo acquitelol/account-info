@@ -147,21 +147,25 @@ const AccountInfo: Plugin = {
                   <View style={styles.information}>
                      {pfpBool &&
                         <FormRow
-                           label={`View ${user.username}'s Profile Picture`}
+                           label={`View ${user.username}'s ${getBoolean('AccountInfo', 'pfpToggle', true) ? 'Profile Picture' : 'Banner'}`}
                            leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
                            trailing={FormRow.Arrow}
                            onPress={() => {
-                              getBoolean("AccountInfo", 'pfpBtn', true) ? Router.openURL(url) : Router.openURL(`https://cdn.discordapp.com/banners/${user.id}/${bannerHash}.png?size=4096`)
+                              getBoolean("AccountInfo", 'pfpToggle', true) ? Router.openURL(url) : Router.openURL(`https://cdn.discordapp.com/banners/${user.id}/${bannerHash}.png?size=4096`)
+                           }}
+                           onLongPress={() => {
+                              toggle("AccountInfo", 'pfpToggle', true)
+                              Toasts.open({ content: `Switched to ${getBoolean('AccountInfo', 'pfpToggle', true) ? 'profile picture' : 'banner'} link.`, source: Pfp })
                            }}
                         >
-                           <FormSwitch
+                           {/* <FormSwitch
                                  value={getBoolean("AccountInfo", 'pfpToggle', true)}
                                  onValueChange={bannerHash ? () => {
                                     toggle("AccountInfo", 'pfpToggle', true)
                                     Toasts.open({ content: `Switched to ${getBoolean('AccountInfo', 'pfpToggle', true) ? 'profile picture' : 'banner'} link.`, source: Pfp })
                                  } : () => {}}
                                  style={styles.switchArrow}
-                              />
+                              /> */}
                         </FormRow>
                      }
                      {pfpBool && statusBool && <FormDivider />}
