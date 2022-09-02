@@ -186,23 +186,25 @@ const AccountInfo: Plugin = {
 	  /*   EXPERIMENTAL (doesnt work as expected)  */
 	  /* ===============------------- */
 
-      const unpatch = Patcher.after(Header, 'default', (_, __, res) => {
+      Patcher.after(Header, 'default', (_, [{user}], res) => {
          const statusElem = findInReactTree(res, e => e?.props?.customStatusActivity)
-         Patcher.instead(statusElem, 'props', (_, args, res) => {
-            let statusBool = getBoolean("AccountInfo", "statusBtn", false)
-            const ActivityToast = getIDByName('pending-alert');
-            console.log(args)
-            // const activityContent = args[0].find(ac => ac.type === 4)
+         let statusBool = getBoolean("AccountInfo", "statusBtn", false)
+         const ActivityToast = getIDByName('pending-alert');
+         const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
+                  
+         const styles = StyleSheet.createThemedStyleSheet({
+            container: {
+               marginTop: 0,
+            },
+         });
 
-            // return statusBool ? <>{res}</> : <>
-            //    <Pressable onPress={() => {
-            //       Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
-            //       Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
-            //    }}>{res}</Pressable>
-            // </>;
-         })
-            
-         unpatch();
+         return statusBool ? <>{res}</> : <>
+            {res}
+            <Pressable onPress={() => {
+               Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
+               Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
+            }} style={styles.container}>{statusElem}</Pressable>
+         </>;
       })
    },
 
