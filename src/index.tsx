@@ -188,8 +188,10 @@ const AccountInfo: Plugin = {
 
       const unpatch = Patcher.after(Header, 'default', (_, [{ user }], res) => {
          const statusElem = findInReactTree(res, e => e?.props?.customStatusActivity)
-
-         Patcher.after(statusElem, 'customStatusActivity', (_, [{ user }], res) => {
+         const exists = (elem: any) => {
+            return elem ? 'exists' : 'doesnt exist'
+         }
+         Patcher.after(statusElem, exists(statusElem), (_, [{ user }], res) => {
             let statusBool = getBoolean("AccountInfo", "statusBtn", false)
             const ActivityToast = getIDByName('pending-alert');
             const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
