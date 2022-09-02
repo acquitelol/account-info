@@ -35,7 +35,7 @@ const AccountInfo: Plugin = {
    onStart() {
 
       Patcher.instead(Header, 'default', (self, args, orig) => {
-         console.log(Header)
+         console.log(Header[0])
 
          let pfpBool = getBoolean("AccountInfo", 'pfpBtn', false)
          let statusBool = getBoolean("AccountInfo", "statusBtn", false)
