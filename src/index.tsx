@@ -192,15 +192,11 @@ const AccountInfo: Plugin = {
          const ActivityToast = getIDByName('pending-alert');
          const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
 
-
-         return statusBool ? <>{res}</> : 
-         <>
-            {res}
-            <Pressable onPress={() => {
-               Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
-               Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
-            }}>{statusElem}</Pressable>
-         </>
+         statusBool ? res = res : res.children = res.children.replace(statusElem, <Pressable onPress={() => {
+            Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
+            Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
+         }}>{statusElem}</Pressable>)
+         return res;
          
       })
    },
