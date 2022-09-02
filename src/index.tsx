@@ -33,6 +33,7 @@ const AccountInfo: Plugin = {
 
    onStart() {
       Patcher.instead(Header, 'default', (self, args, orig) => {
+         
          let pfpBool = getBoolean("AccountInfo", 'pfpBtn', false)
          let statusBool = getBoolean("AccountInfo", "statusBtn", false)
          let createBool = getBoolean("AccountInfo", "createBtn", true)
@@ -186,6 +187,7 @@ const AccountInfo: Plugin = {
 	  /* ===============------------- */
 
       Patcher.after(Header, 'default', (_, [{ user }], res) => {
+         const statusElem = findInReactTree(res, e => e?.props?.customStatusActivity)
          let statusBool = getBoolean("AccountInfo", "statusBtn", false)
          const ActivityToast = getIDByName('pending-alert');
          const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
@@ -196,7 +198,7 @@ const AccountInfo: Plugin = {
             <Pressable onPress={() => {
                Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
                Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
-            }}>{res}</Pressable>
+            }}>{statusElem}</Pressable>
          </>
          
       })
