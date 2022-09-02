@@ -35,11 +35,13 @@ const AccountInfo: Plugin = {
    onStart() {
 
       Patcher.instead(Header, 'default', (self, args, orig) => {
+         console.log(Header)
+
          let pfpBool = getBoolean("AccountInfo", 'pfpBtn', false)
          let statusBool = getBoolean("AccountInfo", "statusBtn", false)
          let createBool = getBoolean("AccountInfo", "createBtn", true)
          let joinBool = getBoolean("AccountInfo", "joinBtn", true)
-		 let masterDisableBool = getBoolean("AccountInfo", "masterDisable", false)
+		   let masterDisableBool = getBoolean("AccountInfo", "masterDisable", false)
 
          const [{ user, channel, type }] = args;
 
@@ -94,7 +96,7 @@ const AccountInfo: Plugin = {
 
          const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
          
-         return masterDisableBool ? <></> : <>
+         return masterDisableBool ? <>{orig.apply(self, args)}</> : <>
             {orig.apply(self, args)}
             <View style={styles.container}>
                {(createBool || joinBool) ? <>
