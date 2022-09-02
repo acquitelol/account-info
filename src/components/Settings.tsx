@@ -70,8 +70,10 @@ export default ({ settings }: SettingsProps) => {
                 }
             />
         </FormSection>
-		<FormRow label={`Plugin Version: ${version}`} />
-		<FormRow label={`Release Channel: ${release}`} />
+		<FormRow label={`
+			Plugin Version: ${version}
+			Release Channel: ${release}
+		`} />
     </ScrollView>
    </>
 };
