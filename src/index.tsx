@@ -42,9 +42,9 @@ const AccountInfo: Plugin = {
          let joinBool = getBoolean("AccountInfo", "joinBtn", true)
 		   let masterDisableBool = getBoolean("AccountInfo", "masterDisable", false)
 
-         const [{ user, channel, type, bannerSource }] = args;
-
-
+         const [{ user, channel, type }] = args;
+         const bannerHash = user.banner
+         console.log(bannerHash)
          if (type !== 0) {
             return orig.apply(self, args);
          }
@@ -149,23 +149,15 @@ const AccountInfo: Plugin = {
                            trailing={<>
                               <FormSwitch
                                  value={getBoolean("AccountInfo", 'pfpBtn', true)}
-                                 onValueChange={() => {
+                                 onValueChange={bannerHash ? () => {
                                     toggle("AccountInfo", 'pfpBtn', true)
                                     Toasts.open({ content: `Switched to ${getBoolean('AccountInfo', 'pfpBtn', true) ? 'banner' : 'profile picture'} link.`, source: Pfp })
-                                 }}
+                                 } : () => {}}
                               />
                               {FormRow.Arrow}
                            </>}
                            onPress={() => {
-                              getBoolean("AccountInfo", 'pfpBtn', true) ? Router.openURL(url) : Patcher.after(ProfileBanner, 'default', (_, [{ bannerSource }], res) => {
-                                 if (typeof bannerSource?.uri !== 'string' || !res) return res;
-                        
-                                 const image = bannerSource.uri
-                                    .replace(/(?:\?size=\d{3,4})?$/, '?size=4096')
-                                    .replace('.webp', '.png');
-                        
-                                 return Router.openURL(image)
-                              });
+                              getBoolean("AccountInfo", 'pfpBtn', true) ? Router.openURL(url) : Router.openURL(`https://cdn.discordapp.com/banners/${user.id}/${bannerHash}.png?size=4096`)
                            }}
                         />
                      }
