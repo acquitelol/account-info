@@ -97,7 +97,6 @@ export default ({ settings }: SettingsProps) => {
 		<FormSection title="Disable Entire Plugin">
             <FormRow
                 label='Disable Plugin'
-                subLabel="Disable all features of AccountInfo"
                 leading={<FormRow.Icon style={styles.icon} source={getIDByName('ic_rulebook_16px')} />}
                 trailing={
                     <FormSwitch
