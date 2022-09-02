@@ -34,7 +34,7 @@ const AccountInfo: Plugin = {
    ...manifest,
 
    onStart() {
-      Patcher.instead(Header, 'default', (self, args, orig) => {
+      const restart = Patcher.instead(Header, 'default', (self, args, orig) => {
          
          let pfpBool = getBoolean("AccountInfo", 'pfpBtn', false)
          let statusBool = getBoolean("AccountInfo", "statusBtn", false)
@@ -162,6 +162,7 @@ const AccountInfo: Plugin = {
                            onLongPress={args[0].displayProfile.banner ? () => {
                               toggle("AccountInfo", 'pfpToggle', true)
                               Toasts.open({ content: `Switched to ${getBoolean('AccountInfo', 'pfpToggle', true) ? 'profile picture' : 'banner'} link.`, source: Pfp })
+                              restart()
                            }: () => {
                               Toasts.open({ content: `${user.username} does not have a banner.`, source: Pfp })
                            }}
