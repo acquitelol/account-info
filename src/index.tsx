@@ -43,8 +43,10 @@ const AccountInfo: Plugin = {
 		   let masterDisableBool = getBoolean("AccountInfo", "masterDisable", false)
 
          const [{ user, channel, type }] = args;
-         let bannerHash = args[0].displayProfile.banner;
-         
+         if (args[0].displayProfile.banner) {
+            var bannerHash = args[0].displayProfile.banner;
+         }
+
          if (type !== 0) {
             return orig.apply(self, args);
          }
@@ -153,9 +155,11 @@ const AccountInfo: Plugin = {
                            onPress={() => {
                               getBoolean("AccountInfo", 'pfpToggle', true) ? Router.openURL(url) : Router.openURL(`https://cdn.discordapp.com/banners/${user.id}/${bannerHash}.png?size=4096`)
                            }}
-                           onLongPress={() => {
+                           onLongPress={args[0].displayProfile.banner ? () => {
                               toggle("AccountInfo", 'pfpToggle', true)
                               Toasts.open({ content: `Switched to ${getBoolean('AccountInfo', 'pfpToggle', true) ? 'profile picture' : 'banner'} link.`, source: Pfp })
+                           }: () => {
+                              Toasts.open({ content: `${user.username} does not have a banner.`, source: Pfp })
                            }}
                         >
                            {/* <FormSwitch

@@ -45,7 +45,7 @@ export default ({ settings }: SettingsProps) => {
             <FormDivider />
             <FormRow
                 label='Time of Joining Server'
-                subLabel='Show when an account joined a server'
+                subLabel='Show when an account Joined a Server'
                 leading={<FormRow.Icon style={styles.icon} source={getIDByName('ic_leave_24px')} />}
                 trailing={
                     <FormSwitch
@@ -63,7 +63,7 @@ export default ({ settings }: SettingsProps) => {
         <FormSection title="Enable Dedicated Buttons">
             <FormRow
                 label="Assets"
-                subLabel="Show dedicated button to view account assets."
+                subLabel="Show dedicated button to view Account Assets"
                 leading={<FormRow.Icon style={styles.icon} source={getIDByName('img_nitro_profile_banner')} />}
                 trailing={
                     <FormSwitch
@@ -114,7 +114,7 @@ export default ({ settings }: SettingsProps) => {
         <FormSection title="Source Code">
             <FormRow
                 label="Download"
-                subLabel="Copy the link of the plugin to Clipboard."
+                subLabel="Copy the link of the plugin to Clipboard"
                 leading={<FormRow.Icon style={styles.icon} source={getIDByName('toast_copy_link')} />}
                 trailing={FormRow.Arrow}
                 onPress={() => {
