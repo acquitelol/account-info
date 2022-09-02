@@ -1,11 +1,15 @@
 {
    "name": "AccountInfo",
-   "version": "Test 1.3.8",
+   "version": "Test 1.3.9",
    "description": "Shows Account Information and Account Assets.",
    "authors": [
       {
          "name": "acquite",
          "id": "581573474296791211"
+      },
+      {
+         "name": "eternal",
+         "id": "263689920210534400"
       }
    ],
    "color": "#ff1f84"

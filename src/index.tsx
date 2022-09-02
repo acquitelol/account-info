@@ -7,7 +7,6 @@ import { create } from 'enmity/patcher';
 import manifest from '../manifest.json';
 import Settings from './components/Settings';
 import { getBoolean } from 'enmity/api/settings'
-import { join } from 'path';
 
 const [
    Header,
@@ -27,12 +26,12 @@ const [
 
 const Patcher = create('account-info');
 const Activity = getByProps('getStatus', 'getState')
-const ActivityHeader = getByProps('activity', '')
 
 const AccountInfo: Plugin = {
    ...manifest,
 
    onStart() {
+
       Patcher.instead(Header, 'default', (self, args, orig) => {
          let pfpBool = getBoolean("AccountInfo", 'pfpBtn', false)
          let statusBool = getBoolean("AccountInfo", "statusBtn", false)
@@ -154,7 +153,7 @@ const AccountInfo: Plugin = {
                               label={`Copy ${user.username}'s Status`}
                               leading={<FormRow.Icon style={styles.icon} source={ActivityForm} />}
                               onPress={() => {
-                                 Clipboard.setString(`:${activityContent.emoji.name}: ${activityContent.state}`);
+                                 Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
                                  Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
                               }}
                            />
@@ -179,13 +178,13 @@ const AccountInfo: Plugin = {
          </Pressable>;
       })
 
-      Patcher.after(ActivityHeader, 'default', (_, [{ user }], res) => {
+      Patcher.after(Activity, 'default', (_, [{ user }], res) => {
          let statusBool = getBoolean("AccountInfo", "statusBtn", false)
          const ActivityToast = getIDByName('pending-alert');
          const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
 
          return statusBool ? <>{res}</> : <Pressable onPress={() => {
-            Clipboard.setString(`:${activityContent.emoji.name}: ${activityContent.state}`);
+            Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
             Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
          }}>
             {res}

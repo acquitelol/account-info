@@ -29,6 +29,7 @@
       "build": "^0.1.4",
       "emity": "^0.0.3",
       "enmity": "*",
-      "enmity-tools": "github:enmity-mod/enmity-tools"
+      "enmity-tools": "github:enmity-mod/enmity-tools",
+      "react-devtools": "^4.25.0"
    }
 }
