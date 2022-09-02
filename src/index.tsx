@@ -27,13 +27,12 @@ const [
 
 const Patcher = create('account-info');
 const Activity = getByProps('getStatus', 'getState')
-const StatusHeader = findInReactTree(Header, e => e?.props?.customStatusActivity)
 
 const AccountInfo: Plugin = {
    ...manifest,
 
    onStart() {
-      console.log(StatusHeader)
+      const StatusHeader = findInReactTree(Header, e => e?.props?.customStatusActivity)
       Patcher.instead(Header, 'default', (self, args, orig) => {
          let pfpBool = getBoolean("AccountInfo", 'pfpBtn', false)
          let statusBool = getBoolean("AccountInfo", "statusBtn", false)
@@ -185,18 +184,18 @@ const AccountInfo: Plugin = {
 	  /*   EXPERIMENTAL (doesnt work)  */
 	  /* ===============------------- */
 
-      // Patcher.after(StatusHeader, 'default', (_, [{ user }], res) => {
-      //    let statusBool = getBoolean("AccountInfo", "statusBtn", false)
-      //    const ActivityToast = getIDByName('pending-alert');
-      //    const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
+      Patcher.after(StatusHeader, 'default', (_, [{ user }], res) => {
+         let statusBool = getBoolean("AccountInfo", "statusBtn", false)
+         const ActivityToast = getIDByName('pending-alert');
+         const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
 
-      //    return statusBool ? <>{res}</> : <Pressable onPress={() => {
-      //       Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
-      //       Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
-      //    }}>
-      //       {res}
-      //    </Pressable>;
-      // })
+         return statusBool ? <>{res}</> : <Pressable onPress={() => {
+            Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
+            Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
+         }}>
+            {res}
+         </Pressable>;
+      })
    },
 
    onStop() {
