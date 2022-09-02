@@ -186,27 +186,48 @@ const AccountInfo: Plugin = {
 	  /*   EXPERIMENTAL (doesnt work as expected)  */
 	  /* ===============------------- */
 
-      Patcher.after(Header, 'default', (_, [{user}], res) => {
-         const statusElem = findInReactTree(res, e => e?.props?.customStatusActivity)
-         let statusBool = getBoolean("AccountInfo", "statusBtn", false)
-         const ActivityToast = getIDByName('pending-alert');
-         const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
+      // Patcher.after(Header, 'default', (_, [{user}], res) => {
+      //    const statusElem = findInReactTree(res, e => e?.props?.customStatusActivity)
+      //    let statusBool = getBoolean("AccountInfo", "statusBtn", false)
+      //    const ActivityToast = getIDByName('pending-alert');
+      //    const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
                   
-         const styles = StyleSheet.createThemedStyleSheet({
-            container: {
-               marginLeft: 15.5,
-               marginTop: -50,
-            },
-         });
+      //    const styles = StyleSheet.createThemedStyleSheet({
+      //       container: {
+      //          marginLeft: 15.5,
+      //          marginTop: -50,
+      //       },
+      //    });
 
-         return statusBool ? <>{res}</> : <>
-            {res}
-            <Pressable onPress={() => {
-               Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
-               Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
-            }} style={styles.container}>{statusElem}</Pressable>
-         </>;
-      })
+      //    return statusBool ? <>{res}</> : <>
+      //       {res}
+      //       <Pressable onPress={() => {
+      //          Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
+      //          Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
+      //       }} style={styles.container}>{statusElem}</Pressable>
+      //    </>;
+      // })
+
+      Patcher.after(Header, 'default', (_, __, res) => {
+         const statusElem = findInReactTree(res, e => e?.props?.customStatusActivity)
+         const leftElems = findInReactTree(res, e => e?.[2]?.props?.customStatusActivity);
+         if (!leftElems) return;
+       
+         const statusBool = getBoolean("AccountInfo", "statusBtn", false);
+         if (statusBool) return;
+       
+         const activityContent = leftElems[2].props.customStatusActivity;
+         const ActivityToast = getIDByName('pending-alert');
+       
+         leftElems[2] = <Pressable onPress={
+           () => {
+             Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
+             Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
+           }
+         }>
+           { statusElem }
+         </Pressable>;
+       })
    },
 
    onStop() {
