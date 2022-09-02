@@ -14,7 +14,8 @@ const [
    Guilds,
    Router,
    Clipboard,
-   AvatarHeader
+   AvatarHeader,
+   StatusHeader
 ] = bulk(
    filters.byDisplayName('UserProfileHeader', false),
    filters.byProps('getMember'),
@@ -22,6 +23,7 @@ const [
    filters.byProps('transitionToGuild'),
    filters.byProps('setString'),
    filters.byName('HeaderAvatar', false),
+   filters.byProps('customStatusActivity')
 );
 
 const Patcher = create('account-info');
@@ -174,7 +176,7 @@ const AccountInfo: Plugin = {
          const discrim = user.discriminator % 5;
          const url = typeof image === 'number' ? `https://cdn.discordapp.com/embed/avatars/${discrim}.png` : image?.replace('.webp', '.png');
 
-         return pfpBool ? <>{res}</> :<Pressable onPress={() => Router.openURL(url)}>
+         return pfpBool ? <>{res}</> : <Pressable onPress={() => Router.openURL(url)}>
             {res}
          </Pressable>;
       })
@@ -183,9 +185,8 @@ const AccountInfo: Plugin = {
 	  /*   EXPERIMENTAL (doesnt work)  */
 	  /* ===============------------- */
 
-      Patcher.after(Header, 'default', (_, [{ user }], res) => {
+      Patcher.after(StatusHeader, 'default', (_, [{ user }], res) => {
          let statusBool = getBoolean("AccountInfo", "statusBtn", false)
-         console.log(res)
          const ActivityToast = getIDByName('pending-alert');
          const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
 
