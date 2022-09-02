@@ -70,7 +70,9 @@ const AccountInfo: Plugin = {
                color: Constants.ThemeColorMap.TEXT_MUTED
             },
             icon: {
-               color: Constants.ThemeColorMap.INTERACTIVE_NORMAL
+               color: Constants.ThemeColorMap.INTERACTIVE_NORMAL,
+               width: '50%',
+               height: '50%'
             },
          });
 
