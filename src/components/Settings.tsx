@@ -29,6 +29,7 @@ export default ({ settings }: SettingsProps) => {
         <FormSection title="Enable Account Date Information">
             <FormRow
                 label='Time of Creation'
+                subLabel='Show when an account was Created'
                 leading={<FormRow.Icon style={styles.icon} source={getIDByName('ic_header_members_add_24px')} />}
                 trailing={
                     <FormSwitch
@@ -44,6 +45,7 @@ export default ({ settings }: SettingsProps) => {
             <FormDivider />
             <FormRow
                 label='Time of Joining Server'
+                subLabel='Show when an account joined a server (if opened in it)'
                 leading={<FormRow.Icon style={styles.icon} source={getIDByName('ic_leave_24px')} />}
                 trailing={
                     <FormSwitch
@@ -61,6 +63,7 @@ export default ({ settings }: SettingsProps) => {
         <FormSection title="Enable Dedicated Buttons">
             <FormRow
                 label='Profile Picture'
+                subLabel="Show dedicated button to view a user's Profile Picture."
                 leading={<FormRow.Icon style={styles.icon} source={getIDByName('img_nitro_profile_banner')} />}
                 trailing={
                     <FormSwitch
@@ -76,6 +79,7 @@ export default ({ settings }: SettingsProps) => {
             <FormDivider />
             <FormRow
                 label='Status'
+                subLabel="Show dedicated button to copy a user's Status"
                 leading={<FormRow.Icon style={styles.icon} source={getIDByName('ic_passport_24px')} />}
                 trailing={
                     <FormSwitch
@@ -93,6 +97,7 @@ export default ({ settings }: SettingsProps) => {
 		<FormSection title="Disable Entire Plugin">
             <FormRow
                 label='Disable Plugin'
+                subLabel="Disable all features of AccountInfo"
                 leading={<FormRow.Icon style={styles.icon} source={getIDByName('ic_rulebook_16px')} />}
                 trailing={
                     <FormSwitch
@@ -110,6 +115,7 @@ export default ({ settings }: SettingsProps) => {
         <FormSection title="Source Code">
             <FormRow
                 label="Download"
+                subLabel="Copy the link of the plugin to Clipboard."
                 leading={<FormRow.Icon style={styles.icon} source={getIDByName('toast_copy_link')} />}
                 trailing={FormRow.Arrow}
                 onPress={() => {
@@ -119,6 +125,7 @@ export default ({ settings }: SettingsProps) => {
             />
             <FormRow
                 label="Source"
+                subLabel="Open the Repo of the Plugin Externally"
                 leading={<FormRow.Icon style={styles.icon} source={getIDByName('ic_leave_stage')} />}
                 trailing={FormRow.Arrow}
                 onPress={() => {

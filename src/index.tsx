@@ -142,6 +142,7 @@ const AccountInfo: Plugin = {
                      {pfpBool &&
                         <FormRow
                            label={`View ${user.username}'s Profile Picture`}
+                           subLabel="Opens a window externally."
                            leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
                            onPress={() => {
                               Router.openURL(url)
@@ -152,6 +153,7 @@ const AccountInfo: Plugin = {
                      {activityContent && statusBool && <>
                            <FormRow
                               label={`Copy ${user.username}'s Status`}
+                              subLabel="Copies the status to clipboard."
                               leading={<FormRow.Icon style={styles.icon} source={ActivityForm} />}
                               onPress={() => {
                                  Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
