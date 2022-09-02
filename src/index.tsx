@@ -93,7 +93,6 @@ const AccountInfo: Plugin = {
          const discrim = user.discriminator % 5;
          const url = typeof image === 'number' ? `https://cdn.discordapp.com/embed/avatars/${discrim}.png` : image?.replace('.webp', '.png');
          
-         const bannerImage = getBanner()
          const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
          
          return masterDisableBool ? <>{orig.apply(self, args)}</> : <>
@@ -155,9 +154,18 @@ const AccountInfo: Plugin = {
                                     Toasts.open({ content: `Switched to ${getBoolean('AccountInfo', 'pfpBtn', true) ? 'banner' : 'profile picture'} link.`, source: Pfp })
                                  }}
                               />
+                              {FormRow.Arrow}
                            </>}
                            onPress={() => {
-                              getBoolean("AccountInfo", 'pfpBtn', true) ? Router.openURL(url) : Router.openURL(bannerImage)
+                              getBoolean("AccountInfo", 'pfpBtn', true) ? Router.openURL(url) : Patcher.after(ProfileBanner, 'default', (_, [{ bannerSource }], res) => {
+                                 if (typeof bannerSource?.uri !== 'string' || !res) return res;
+                        
+                                 const image = bannerSource.uri
+                                    .replace(/(?:\?size=\d{3,4})?$/, '?size=4096')
+                                    .replace('.webp', '.png');
+                        
+                                 return Router.openURL(image)
+                              });
                            }}
                         />
                      }
@@ -206,15 +214,7 @@ const AccountInfo: Plugin = {
          </Pressable>;
       });
 
-      const getBanner = Patcher.after(ProfileBanner, 'default', (_, [{ bannerSource }], res) => {
-         if (typeof bannerSource?.uri !== 'string' || !res) return res;
 
-         const image = bannerSource.uri
-            .replace(/(?:\?size=\d{3,4})?$/, '?size=4096')
-            .replace('.webp', '.png');
-
-         return image;
-      });
       
       Patcher.after(Header, 'default', (_, __, res) => {
          const statusElem = findInReactTree(res, e => e?.props?.customStatusActivity)
