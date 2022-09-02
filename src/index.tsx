@@ -2,7 +2,7 @@ import { Constants, Moment, React, StyleSheet, Toasts } from 'enmity/metro/commo
 import { FormDivider, FormRow, Text, View, Pressable } from 'enmity/components';
 import { Plugin, registerPlugin } from 'enmity/managers/plugins';
 import { getIDByName } from 'enmity/api/assets';
-import { bulk, filters, getByProps } from 'enmity/metro';
+import { bulk, filters, getByName, getByProps } from 'enmity/metro';
 import { findInReactTree } from 'enmity/utilities'
 import { create } from 'enmity/patcher';
 import manifest from '../manifest.json';
@@ -27,7 +27,7 @@ const [
 
 const Patcher = create('account-info');
 const Activity = getByProps('getStatus', 'getState')
-const StatusHeader = findInReactTree(Header, getByProps('customStatusActivity'))
+const StatusHeader = findInReactTree(Header, getByName('pe'))
 
 const AccountInfo: Plugin = {
    ...manifest,
