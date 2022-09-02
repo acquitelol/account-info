@@ -39,6 +39,7 @@ const AccountInfo: Plugin = {
          let statusBool = getBoolean("AccountInfo", "statusBtn", false)
          let createBool = getBoolean("AccountInfo", "createBtn", true)
          let joinBool = getBoolean("AccountInfo", "joinBtn", true)
+		 let masterDisableBool = getBoolean("AccountInfo", "masterDisable", false)
 
          const [{ user, channel, type }] = args;
 
@@ -93,7 +94,7 @@ const AccountInfo: Plugin = {
 
          const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
          
-         return <>
+         return masterDisableBool ? <></> : <>
             {orig.apply(self, args)}
             <View style={styles.container}>
                {(createBool || joinBool) ? <>

@@ -70,6 +70,21 @@ export default ({ settings }: SettingsProps) => {
                 }
             />
         </FormSection>
+		<FormSection title="Disable Entire Plugin">
+            <FormRow
+                label='Disable Plugin'
+                trailing={
+                    <FormSwitch
+                        value={settings.getBoolean('masterDisable', false)}
+                        onValueChange={() => {
+                                settings.toggle('masterDisable', false)
+                                Toasts.open({ content: `Successfully ${settings.getBoolean('masterDisable', false) ? 'disabled' : 'enabled'} AccountInfo}`, source: toastTrail });
+                            }
+                        }
+                    />
+                }
+            />
+        </FormSection>
 		<FormRow label={`Plugin Version: ${version}
 Release Channel: ${release}`} />
     </ScrollView>
