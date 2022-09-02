@@ -1,7 +1,7 @@
 {
    "name": "account-info",
    "description": "Shows Account Information and Account Assets.",
-   "version": "1.1.5",
+   "version": "1.4.2",
    "license": "GPL-3.0",
    "author": "Acquite",
    "scripts": {
