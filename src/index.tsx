@@ -188,9 +188,6 @@ const AccountInfo: Plugin = {
 
       const unpatch = Patcher.after(Header, 'default', (_, [{ user }], res) => {
          const statusElem = findInReactTree(res, e => e?.props?.customStatusActivity)
-         const exists = (elem: any) => {
-            return elem ? 'exists' : 'doesnt exist'
-         }
          console.log(statusElem)
          // Patcher.after(statusElem, exists(statusElem), (_, [{ user }], res) => {
          //    let statusBool = getBoolean("AccountInfo", "statusBtn", false)
