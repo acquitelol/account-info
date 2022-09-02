@@ -71,8 +71,6 @@ const AccountInfo: Plugin = {
             },
             icon: {
                color: Constants.ThemeColorMap.INTERACTIVE_NORMAL,
-               width: '50%',
-               height: '50%'
             },
          });
 
@@ -145,7 +143,7 @@ const AccountInfo: Plugin = {
                         <FormRow
                            label={`View ${user.username}'s Profile Picture`}
                            leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
-                           trailing={<FormRow.Icon style={styles.icon} source={getIDByName('ic_upload_24px')} />}
+                           trailing={FormRow.Arrow}
                            onPress={() => {
                               Router.openURL(url)
                            }}
@@ -156,7 +154,7 @@ const AccountInfo: Plugin = {
                            <FormRow
                               label={`Copy ${user.username}'s Status`}
                               leading={<FormRow.Icon style={styles.icon} source={ActivityForm} />}
-                              trailing={<FormRow.Icon style={styles.icon} source={getIDByName('ic_select_all_24px')} />}
+                              trailing={FormRow.Arrow}
                               onPress={() => {
                                  Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
                                  Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
