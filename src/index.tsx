@@ -7,7 +7,7 @@ import { findInReactTree } from 'enmity/utilities'
 import { create } from 'enmity/patcher';
 import manifest from '../manifest.json';
 import Settings from './components/Settings';
-import { getBoolean, toggle } from 'enmity/api/settings'
+import { getBoolean, set, toggle } from 'enmity/api/settings'
 
 const [
    Header,
@@ -42,9 +42,13 @@ const AccountInfo: Plugin = {
          let joinBool = getBoolean("AccountInfo", "joinBtn", true)
 		   let masterDisableBool = getBoolean("AccountInfo", "masterDisable", false)
 
+         
+
          const [{ user, channel, type }] = args;
          if (args[0].displayProfile.banner) {
             var bannerHash = args[0].displayProfile.banner;
+         } else {
+            set("AccountInfo", 'pfpToggle', true)
          }
 
          if (type !== 0) {
