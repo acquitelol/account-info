@@ -35,7 +35,9 @@ const AccountInfo: Plugin = {
 
    onStart() {
       Patcher.instead(Header, 'default', (self, args, orig) => {
-         
+
+         const [pfpState, setPfpState] = React.useState('Profile Picture')
+
          let pfpBool = getBoolean("AccountInfo", 'pfpBtn', false)
          let statusBool = getBoolean("AccountInfo", "statusBtn", false)
          let createBool = getBoolean("AccountInfo", "createBtn", true)
@@ -154,7 +156,7 @@ const AccountInfo: Plugin = {
                   <View style={styles.information}>
                      {pfpBool && <>
                            <FormRow
-                              label={`View ${user.username}'s ${bannerHash ? getBoolean('AccountInfo', 'pfpToggle', true) ? 'Profile Picture' : 'Banner' : "Profile Picture"}`}
+                              label={`View ${user.username}'s ${pfpState}`}
                               leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
                               trailing={FormRow.Arrow}
                               onPress={() => {
@@ -163,6 +165,7 @@ const AccountInfo: Plugin = {
                               onLongPress={bannerHash ? () => {
                                  toggle("AccountInfo", 'pfpToggle', true)
                                  Toasts.open({ content: `Switched to ${getBoolean('AccountInfo', 'pfpToggle', true) ? 'profile picture' : 'banner'} link.`, source: Pfp })
+                                 setPfpState(pfpState=='Profile Picture' ? "Banner" : "Profile Picture")
                               }: () => {
                                  Toasts.open({ content: `${user.username} does not have a banner.`, source: Pfp })
                               }}
