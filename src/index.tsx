@@ -45,9 +45,10 @@ const AccountInfo: Plugin = {
          
 
          const [{ user, channel, type }] = args;
-         if (args[0].displayProfile.banner) {
+         try {
             var bannerHash = args[0].displayProfile.banner;
-         } else {
+         } catch {
+            console.log('Banner doesnt exist.')
             set("AccountInfo", 'pfpToggle', true)
          }
 
@@ -152,7 +153,6 @@ const AccountInfo: Plugin = {
                   </Text>
                   <View style={styles.information}>
                      {pfpBool && <>
-                        <ScrollView>
                            <FormRow
                               label={`View ${user.username}'s ${getBoolean('AccountInfo', 'pfpToggle', true) ? 'Profile Picture' : 'Banner'}`}
                               leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
@@ -160,7 +160,7 @@ const AccountInfo: Plugin = {
                               onPress={() => {
                                  getBoolean("AccountInfo", 'pfpToggle', true) ? Router.openURL(url) : Router.openURL(`https://cdn.discordapp.com/banners/${user.id}/${bannerHash}.png?size=4096`)
                               }}
-                              onLongPress={args[0].displayProfile.banner ? () => {
+                              onLongPress={bannerHash ? () => {
                                  toggle("AccountInfo", 'pfpToggle', true)
                                  Toasts.open({ content: `Switched to ${getBoolean('AccountInfo', 'pfpToggle', true) ? 'profile picture' : 'banner'} link.`, source: Pfp })
                               }: () => {
@@ -176,7 +176,6 @@ const AccountInfo: Plugin = {
                                     style={styles.switchArrow}
                                  /> */}
                            </FormRow>
-                        </ScrollView>
                      </>
                      }
                      {pfpBool && statusBool && <FormDivider />}
