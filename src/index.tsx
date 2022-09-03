@@ -154,7 +154,7 @@ const AccountInfo: Plugin = {
                   <View style={styles.information}>
                      {pfpBool && <>
                            <FormRow
-                              label={`View ${user.username}'s ${getBoolean('AccountInfo', 'pfpToggle', true) ? 'Profile Picture' : 'Banner'}`}
+                              label={`View ${user.username}'s ${bannerHash ? getBoolean('AccountInfo', 'pfpToggle', true) ? 'Profile Picture' : 'Banner' : "Profile Picture"}`}
                               leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
                               trailing={FormRow.Arrow}
                               onPress={() => {
