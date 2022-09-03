@@ -161,10 +161,12 @@ const AccountInfo: Plugin = {
                            label={`View ${user.username}'s ${getBoolean('AccountInfo', 'pfpToggle', true) ? 'Profile Picture' : 'Banner'}`}
                            leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
                            trailing={<FormSwitch
-                                       value={({ settings }: SettingsProps) => settings.getBoolean('pfpToggle', true)}
-                                       onValueChange={args[0].displayProfile.banner ? ({ settings }: SettingsProps) => {
-                                          settings.toggle('pfpToggle', true)
-                                          Toasts.open({ content: `Switched to ${settings.getBoolean('pfpToggle', true) ? 'profile picture' : 'banner'} link.`, source: Pfp })
+                                       value={getBoolean('AccountInfo', 'pfpToggle', true)}
+                                       onValueChange={args[0].displayProfile.banner ? () => {
+                                          let toggleBtn = getBoolean('AccountInfo', 'pfpToggle', true)
+                                          toggleBtn = !toggleBtn
+                                          set('AccountInfo', 'pfpToggle', toggleBtn)
+                                          Toasts.open({ content: `Switched to ${getBoolean('AccountInfo', 'pfpToggle', true) ? 'profile picture' : 'banner'} link.`, source: Pfp })
                                        } : () => {}}
                                        style={styles.switchArrow}
                                     />}
