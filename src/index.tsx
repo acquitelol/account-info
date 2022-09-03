@@ -1,5 +1,5 @@
 import { Constants, Moment, React, StyleSheet, Toasts } from 'enmity/metro/common';
-import { FormDivider, FormRow, FormSwitch, Text, View, Pressable } from 'enmity/components';
+import { FormDivider, FormRow, FormSwitch, Text, View, Pressable, ScrollView } from 'enmity/components';
 import { Plugin, registerPlugin } from 'enmity/managers/plugins';
 import { getIDByName } from 'enmity/api/assets';
 import { bulk, filters, getByName, getByProps } from 'enmity/metro';
@@ -7,7 +7,7 @@ import { findInReactTree } from 'enmity/utilities'
 import { create } from 'enmity/patcher';
 import manifest from '../manifest.json';
 import Settings from './components/Settings';
-import { SettingsStore, getBoolean, set, toggle } from 'enmity/api/settings'
+import { getBoolean, set, toggle } from 'enmity/api/settings'
 
 const [
    Header,
@@ -26,11 +26,6 @@ const [
    filters.byName('HeaderAvatar', false),
    filters.byName('ProfileBanner', false)
 );
-
-interface SettingsProps {
-   settings: SettingsStore;
-}
-
 
 const Patcher = create('account-info');
 const Activity = getByProps('getStatus', 'getState')
@@ -156,26 +151,33 @@ const AccountInfo: Plugin = {
                      Account Assets
                   </Text>
                   <View style={styles.information}>
-                     {pfpBool &&
-                        <FormRow
-                           label={`View ${user.username}'s ${getBoolean('AccountInfo', 'pfpToggle', true) ? 'Profile Picture' : 'Banner'}`}
-                           leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
-                           trailing={<FormSwitch
-                                       value={getBoolean('AccountInfo', 'pfpToggle', true)}
-                                       onValueChange={args[0].displayProfile.banner ? () => {
-                                          let toggleBtn = getBoolean('AccountInfo', 'pfpToggle', true)
-                                          toggleBtn = !toggleBtn
-                                          set('AccountInfo', 'pfpToggle', toggleBtn)
-                                          Toasts.open({ content: `Switched to ${getBoolean('AccountInfo', 'pfpToggle', true) ? 'profile picture' : 'banner'} link.`, source: Pfp })
-                                       } : () => {}}
-                                       style={styles.switchArrow}
-                                    />}
-                           onPress={() => {
-                              getBoolean("AccountInfo", 'pfpToggle', true) ? Router.openURL(url) : Router.openURL(`https://cdn.discordapp.com/banners/${user.id}/${bannerHash}.png?size=4096`)
-                           }}
-                        >
-                           
-                        </FormRow>
+                     {pfpBool && <>
+                        <ScrollView>
+                           <FormRow
+                              label={`View ${user.username}'s ${getBoolean('AccountInfo', 'pfpToggle', true) ? 'Profile Picture' : 'Banner'}`}
+                              leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
+                              trailing={FormRow.Arrow}
+                              onPress={() => {
+                                 getBoolean("AccountInfo", 'pfpToggle', true) ? Router.openURL(url) : Router.openURL(`https://cdn.discordapp.com/banners/${user.id}/${bannerHash}.png?size=4096`)
+                              }}
+                              onLongPress={args[0].displayProfile.banner ? () => {
+                                 toggle("AccountInfo", 'pfpToggle', true)
+                                 Toasts.open({ content: `Switched to ${getBoolean('AccountInfo', 'pfpToggle', true) ? 'profile picture' : 'banner'} link.`, source: Pfp })
+                              }: () => {
+                                 Toasts.open({ content: `${user.username} does not have a banner.`, source: Pfp })
+                              }}
+                           >
+                              {/* <FormSwitch
+                                    value={getBoolean("AccountInfo", 'pfpToggle', true)}
+                                    onValueChange={bannerHash ? () => {
+                                       toggle("AccountInfo", 'pfpToggle', true)
+                                       Toasts.open({ content: `Switched to ${getBoolean('AccountInfo', 'pfpToggle', true) ? 'profile picture' : 'banner'} link.`, source: Pfp })
+                                    } : () => {}}
+                                    style={styles.switchArrow}
+                                 /> */}
+                           </FormRow>
+                        </ScrollView>
+                     </>
                      }
                      {pfpBool && statusBool && <FormDivider />}
                      {activityContent && statusBool && <>
