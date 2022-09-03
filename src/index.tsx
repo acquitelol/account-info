@@ -199,26 +199,28 @@ const AccountInfo: Plugin = {
 
       Patcher.after(AvatarHeader, 'default', (_, [{ user }], res) => {
          let pfpBool = getBoolean("AccountInfo", 'pfpBtn', false)
+         let masterDisableBool = getBoolean("AccountInfo", "masterDisable", false)
          const image = user?.getAvatarURL?.(false, 4096, true);
          if (!image) return res;
 
          const discrim = user.discriminator % 5;
          const url = typeof image === 'number' ? `https://cdn.discordapp.com/embed/avatars/${discrim}.png` : image?.replace('.webp', '.png');
 
-         return pfpBool ? <>{res}</> : <Pressable onPress={() => Router.openURL(url)}>
+         return masterDisableBool ? <>{res}</> : pfpBool ? <>{res}</> : <Pressable onPress={() => Router.openURL(url)}>
             {res}
          </Pressable>;
       })
 
       Patcher.after(ProfileBanner, 'default', (_, [{ bannerSource }], res) => {
          let pfpBool = getBoolean("AccountInfo", 'pfpBtn', false)
+         let masterDisableBool = getBoolean("AccountInfo", "masterDisable", false)
          if (typeof bannerSource?.uri !== 'string' || !res) return res;
 
          const image = bannerSource.uri
             .replace(/(?:\?size=\d{3,4})?$/, '?size=4096')
             .replace('.webp', '.png');
 
-         return pfpBool ? <>{res}</> : <Pressable onPress={() => Router.openURL(image)}>
+         return masterDisableBool ? <>{res}</> : pfpBool ? <>{res}</> : <Pressable onPress={() => Router.openURL(image)}>
             {res}
          </Pressable>;
       });
@@ -235,6 +237,9 @@ const AccountInfo: Plugin = {
          const statusBool = getBoolean("AccountInfo", "statusBtn", false);
          if (statusBool) return res;
        
+         const masterDisableBool = getBoolean("AccountInfo", "masterDisable", false);
+         if (masterDisableBool) return res;
+
          const activityContent = leftElems[2].props.customStatusActivity;
          const ActivityToast = getIDByName('pending-alert');
        
