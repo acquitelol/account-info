@@ -7,7 +7,7 @@ import { findInReactTree } from 'enmity/utilities'
 import { create } from 'enmity/patcher';
 import manifest from '../manifest.json';
 import Settings from './components/Settings';
-import { getBoolean, set, toggle } from 'enmity/api/settings'
+import { SettingsStore, getBoolean, set, toggle } from 'enmity/api/settings'
 
 const [
    Header,
@@ -27,6 +27,11 @@ const [
    filters.byName('ProfileBanner', false)
 );
 
+interface SettingsProps {
+   settings: SettingsStore;
+}
+
+
 const Patcher = create('account-info');
 const Activity = getByProps('getStatus', 'getState')
 
@@ -34,7 +39,7 @@ const AccountInfo: Plugin = {
    ...manifest,
 
    onStart() {
-      const restart = Patcher.instead(Header, 'default', (self, args, orig) => {
+      Patcher.instead(Header, 'default', (self, args, orig) => {
          
          let pfpBool = getBoolean("AccountInfo", 'pfpBtn', false)
          let statusBool = getBoolean("AccountInfo", "statusBtn", false)
@@ -155,26 +160,19 @@ const AccountInfo: Plugin = {
                         <FormRow
                            label={`View ${user.username}'s ${getBoolean('AccountInfo', 'pfpToggle', true) ? 'Profile Picture' : 'Banner'}`}
                            leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
-                           trailing={FormRow.Arrow}
+                           trailing={<FormSwitch
+                                       value={({ settings }: SettingsProps) => settings.getBoolean('pfpToggle', true)}
+                                       onValueChange={args[0].displayProfile.banner ? ({ settings }: SettingsProps) => {
+                                          settings.toggle('pfpToggle', true)
+                                          Toasts.open({ content: `Switched to ${settings.getBoolean('pfpToggle', true) ? 'profile picture' : 'banner'} link.`, source: Pfp })
+                                       } : () => {}}
+                                       style={styles.switchArrow}
+                                    />}
                            onPress={() => {
                               getBoolean("AccountInfo", 'pfpToggle', true) ? Router.openURL(url) : Router.openURL(`https://cdn.discordapp.com/banners/${user.id}/${bannerHash}.png?size=4096`)
                            }}
-                           onLongPress={args[0].displayProfile.banner ? () => {
-                              toggle("AccountInfo", 'pfpToggle', true)
-                              Toasts.open({ content: `Switched to ${getBoolean('AccountInfo', 'pfpToggle', true) ? 'profile picture' : 'banner'} link.`, source: Pfp })
-                              restart()
-                           }: () => {
-                              Toasts.open({ content: `${user.username} does not have a banner.`, source: Pfp })
-                           }}
                         >
-                           {/* <FormSwitch
-                                 value={getBoolean("AccountInfo", 'pfpToggle', true)}
-                                 onValueChange={bannerHash ? () => {
-                                    toggle("AccountInfo", 'pfpToggle', true)
-                                    Toasts.open({ content: `Switched to ${getBoolean('AccountInfo', 'pfpToggle', true) ? 'profile picture' : 'banner'} link.`, source: Pfp })
-                                 } : () => {}}
-                                 style={styles.switchArrow}
-                              /> */}
+                           
                         </FormRow>
                      }
                      {pfpBool && statusBool && <FormDivider />}
