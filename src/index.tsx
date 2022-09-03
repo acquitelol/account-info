@@ -158,7 +158,7 @@ const AccountInfo: Plugin = {
                               leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
                               trailing={FormRow.Arrow}
                               onPress={() => {
-                                 getBoolean("AccountInfo", 'pfpToggle', true) ? Router.openURL(url) : Router.openURL(`https://cdn.discordapp.com/banners/${user.id}/${bannerHash}.png?size=4096`)
+                                 bannerHash ? getBoolean("AccountInfo", 'pfpToggle', true) ? Router.openURL(url) : Router.openURL(`https://cdn.discordapp.com/banners/${user.id}/${bannerHash}.png?size=4096`) : Router.openURL(url)
                               }}
                               onLongPress={bannerHash ? () => {
                                  toggle("AccountInfo", 'pfpToggle', true)
