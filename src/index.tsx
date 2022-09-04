@@ -188,7 +188,12 @@ const AccountInfo: Plugin = {
                               leading={<FormRow.Icon style={styles.icon} source={ActivityForm} />}
                               trailing={FormRow.Arrow}
                               onPress={() => {
-                                 Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
+                                 try {
+                                    var emojiName = activityContent.emoji.name
+                                 } catch {
+                                    console.log(`${user.username} does not have an emoji in their status.`)
+                                 }
+                                 Clipboard.setString(`${emojiName ? `:${emojiName}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
                                  Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
                               }}
                            />
