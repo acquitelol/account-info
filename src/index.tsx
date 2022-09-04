@@ -159,7 +159,7 @@ const AccountInfo: Plugin = {
                               leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
                               trailing={FormRow.Arrow}
                               onPress={() => {
-                                 bannerHash ? getBoolean("AccountInfo", 'pfpToggle', true) ? Router.openURL(url) : Router.openURL(`https://cdn.discordapp.com/banners/${user.id}/${bannerHash}.png?size=4096`) : Router.openURL(url)
+                                 bannerHash ? getBoolean("AccountInfo", 'pfpToggle', true) ? Router.openURL(url) : Router.openURL(`https://cdn.discordapp.com/banners/${user.id}/${bannerHash}.${bannerHash.startsWith('_a')?'gif':'png'}?size=4096`) : Router.openURL(url)
                               }}
                               onLongPress={bannerHash ? () => {
                                  toggle("AccountInfo", 'pfpToggle', true)
@@ -227,7 +227,14 @@ const AccountInfo: Plugin = {
             .replace(/(?:\?size=\d{3,4})?$/, '?size=4096')
             .replace('.webp', '.png');
 
-         return masterDisableBool ? <>{res}</> : pfpBool ? <>{res}</> : <Pressable onPress={() => Router.openURL(image)}>
+         const finalImage = image.split('/')
+         const bannerHash = finalImage[5].split('.', 1)
+         const gifOrPng = bannerHash.startsWith('a_') ? '.gif' : '.png'
+
+         const finalFinalImage = bannerSource.uri
+         .replace(/(?:\?size=\d{3,4})?$/, '?size=4096')
+         .replace('.webp', gifOrPng);
+         return masterDisableBool ? <>{res}</> : pfpBool ? <>{res}</> : <Pressable onPress={() => Router.openURL(finalFinalImage)}>
             {res}
          </Pressable>;
       });
