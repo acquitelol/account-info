@@ -50,7 +50,6 @@ const AccountInfo: Plugin = {
          try {
             var bannerHash = args[0].displayProfile.banner;
          } catch {
-            console.log('Banner doesnt exist.')
             set("AccountInfo", 'pfpToggle', true)
          }
 
@@ -191,7 +190,7 @@ const AccountInfo: Plugin = {
                                  try {
                                     var emojiName = activityContent.emoji.name
                                  } catch {
-                                    console.log(`${user.username} does not have an emoji in their status.`)
+                                    
                                  }
                                  Clipboard.setString(`${emojiName ? `:${emojiName}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
                                  Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
@@ -253,8 +252,13 @@ const AccountInfo: Plugin = {
        
          leftElems[2] = <Pressable onPress={
            () => {
-             Clipboard.setString(`${activityContent.emoji.name ? `:${activityContent.emoji.name}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
-             Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
+            try {
+               var emojiName = activityContent.emoji.name
+            } catch {
+               
+            }
+            Clipboard.setString(`${emojiName ? `:${emojiName}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
+            Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
            }
          }>
            { statusElem }
