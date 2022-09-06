@@ -224,10 +224,14 @@ const AccountInfo: Plugin = {
          if (typeof bannerSource?.uri !== 'string' || !res) return res;
 
          const image = bannerSource.uri
-            .replace(/(?:\?size=\d{3,4})?$/, '?size=4096')
-            .replace('.webp', '.png');
-         console.log(bannerSource)
-         return masterDisableBool ? <>{res}</> : pfpBool ? <>{res}</> : <Pressable onPress={() => Router.openURL(image)}>
+
+         let bannerImageSplitBySlashes = image.split('/')
+         let bannerHash = (bannerImageSplitBySlashes[5]).split('.')[0]
+         let userId = bannerImageSplitBySlashes[4]
+         
+         const finalImage = `https://cdn.discordapp.com/banners/${userId}/${bannerHash}.${bannerHash.startsWith('a_')?'gif':'png'}?size=4096`
+
+         return masterDisableBool ? <>{res}</> : pfpBool ? <>{res}</> : <Pressable onPress={() => Router.openURL(finalImage)}>
             {res}
          </Pressable>;
       });
