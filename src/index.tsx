@@ -1,9 +1,9 @@
 // main imports of elements and dependencies
-import { Constants, Moment, React, StyleSheet, Toasts } from 'enmity/metro/common';
+import { Constants, React, StyleSheet, Toasts } from 'enmity/metro/common';
 import { FormDivider, FormRow, FormSwitch, Text, View, Pressable, ScrollView } from 'enmity/components';
 import { Plugin, registerPlugin } from 'enmity/managers/plugins';
 import { getIDByName } from 'enmity/api/assets';
-import { bulk, filters, getByName, getByProps } from 'enmity/metro';
+import { bulk, filters, getByProps } from 'enmity/metro';
 import { findInReactTree } from 'enmity/utilities'
 import { create } from 'enmity/patcher';
 import manifest from '../manifest.json';
@@ -13,8 +13,6 @@ import { getBoolean, set, toggle } from 'enmity/api/settings'
 // main declaration of modules being altered by the plugin
 const [
    Header,
-   Members,
-   Guilds,
    Router,
    Clipboard,
    AvatarHeader,
@@ -47,7 +45,7 @@ const AccountInfo: Plugin = {
 		   let masterDisableBool = getBoolean("AccountInfo", "masterDisable", false)
 
          // destructuring the object to make it easier to use the args inside of the object
-         const [{ user, channel, type }] = args;
+         const [{ user, type }] = args;
 
          // attempts to get the hash of the user's banner, but if they have none,
          // then set the pfpToggle to true, aka make it so they cannot access the banner button.

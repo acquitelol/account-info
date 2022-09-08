@@ -3,7 +3,7 @@ import { SettingsStore, getBoolean } from 'enmity/api/settings';
 import { getIDByName } from 'enmity/api/assets';
 import { React, Toasts, Constants, StyleSheet } from 'enmity/metro/common';
 import { version, release} from '../../manifest.json';
-import { bulk, filters, getByName, getByProps } from 'enmity/metro';
+import { bulk, filters} from 'enmity/metro';
 
 interface SettingsProps {
    settings: SettingsStore;
@@ -21,7 +21,7 @@ export default ({ settings }: SettingsProps) => {
    const toastTrail = getIDByName('ic_selection_checked_24px');
    const styles = StyleSheet.createThemedStyleSheet({
         icon: {
-        color: Constants.ThemeColorMap.INTERACTIVE_NORMAL
+            color: Constants.ThemeColorMap.INTERACTIVE_NORMAL
         }
     });
    return <>
