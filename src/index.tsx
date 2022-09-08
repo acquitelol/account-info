@@ -35,7 +35,7 @@ const AccountInfo: Plugin = {
    ...manifest,
 
    onStart() {
-      Patcher.after(Header, 'default', (self, args, orig) => {
+      Patcher.after(Header, 'default', (self, args, res) => {
          // used for pfp button
          const [pfpState, setPfpState] = React.useState('Profile Picture')
 
@@ -56,7 +56,7 @@ const AccountInfo: Plugin = {
          }
 
          if (type !== 0) {
-            return orig.apply(self, args);
+            return res;
          }
          
          // main stylesheet for native element padding etc
@@ -98,7 +98,7 @@ const AccountInfo: Plugin = {
 
          // get a user's pfp through the getAvatarURL method
          const image = user?.getAvatarURL?.(false, 4096, true);
-         if (!image) return orig.apply(self, args);
+         if (!image) return res;
 
          const discrim = user.discriminator % 5;
          const url = typeof image === 'number' ? `https://cdn.discordapp.com/embed/avatars/${discrim}.png` : image?.replace('.webp', '.png');
@@ -106,11 +106,10 @@ const AccountInfo: Plugin = {
          // get a user's status through getActivities method
          const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
          
-
          // main return statement of all edits
          // renders default header if the masterDisableBool is active
-         return masterDisableBool ? <>{orig.apply(self, args)}</> : <>
-            {orig.apply(self, args)}
+         return masterDisableBool ? <>{res}</> : <>
+            {res}
             <View style={styles.container}>
                {(pfpBool || statusBool) ? <>
                   <Text style={styles.header}>
@@ -137,8 +136,7 @@ const AccountInfo: Plugin = {
                               }}
                            >
                            </FormRow>
-                     </>
-                     }
+                     </>}
                      {pfpBool && statusBool && <FormDivider />}
                      {activityContent && statusBool && <>
                            <FormRow
