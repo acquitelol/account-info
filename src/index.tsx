@@ -253,7 +253,6 @@ const AccountInfo: Plugin = {
    onStop() {
       // unpatches everything and clears the clipboard
       Patcher.unpatchAll();
-      Clipboard.setString("");
    },
 
    getSettingsPanel({ settings }) {
