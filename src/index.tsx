@@ -37,15 +37,13 @@ const AccountInfo: Plugin = {
    ...manifest,
 
    onStart() {
-      Patcher.instead(Header, 'default', (self, args, orig) => {
+      Patcher.after(Header, 'default', (self, args, orig) => {
          // used for pfp button
          const [pfpState, setPfpState] = React.useState('Profile Picture')
 
          // setting booleans for toggling buttons
          let pfpBool = getBoolean("AccountInfo", 'pfpBtn', false)
          let statusBool = getBoolean("AccountInfo", "statusBtn", false)
-         let createBool = getBoolean("AccountInfo", "createBtn", true)
-         let joinBool = getBoolean("AccountInfo", "joinBtn", true)
 		   let masterDisableBool = getBoolean("AccountInfo", "masterDisable", false)
 
          // destructuring the object to make it easier to use the args inside of the object
@@ -99,13 +97,6 @@ const AccountInfo: Plugin = {
          const Pfp = getIDByName('img_nitro_profile_banner');
          const ActivityToast = getIDByName('pending-alert');
          const ActivityForm = getIDByName('toast_copy_link');
-         const Add = getIDByName('ic_header_members_add_24px');
-         const Joined = getIDByName('ic_leave_24px');
-
-         // checks if client is currently in a guild and then gets the member if they are in the guild to display guild join date
-         const isGuild = channel?.guild_id;
-         const member = isGuild && Members.getMember(channel.guild_id, user.id);
-         const guild = isGuild && Guilds.getGuild(channel.guild_id);
 
          // get a user's pfp through the getAvatarURL method
          const image = user?.getAvatarURL?.(false, 4096, true);
@@ -123,45 +114,6 @@ const AccountInfo: Plugin = {
          return masterDisableBool ? <>{orig.apply(self, args)}</> : <>
             {orig.apply(self, args)}
             <View style={styles.container}>
-               {(createBool || joinBool) ? <>
-                  <Text style={styles.header}>
-                     Account Information
-                  </Text>
-                  
-                  <View style={styles.information}>
-                     {createBool && <>
-                        <FormRow
-                           label='Created'
-                           leading={<FormRow.Icon style={styles.icon} source={Add} />}
-                           onPress={() => {
-                              Toasts.open({
-                                 content: Moment(user.createdAt).format('LLL'),
-                                 source: Add
-                              });
-                           }}
-                           trailing={() => <Text style={styles.item}>
-                              {Moment(user.createdAt).fromNow()}
-                           </Text>}
-                        />
-                     </>}
-                     {createBool && joinBool && isGuild && member && <FormDivider />}
-                     {joinBool && isGuild && member &&<>
-                        <FormRow
-                           label={`Joined ${guild?.name ?? ''}`}
-                           leading={<FormRow.Icon style={styles.icon} source={Joined} />}
-                           onPress={() => {
-                              Toasts.open({
-                                 content: Moment(member.joinedAt).format('LLL'),
-                                 source: Joined
-                              });
-                           }}
-                           trailing={() => <Text style={styles.item}>
-                              {Moment(member.joinedAt).fromNow()}
-                           </Text>}
-                        />
-                     </>}
-                  </View>
-               </> : <></>}
                {(pfpBool || statusBool) ? <>
                   <Text style={styles.header}>
                      Account Assets

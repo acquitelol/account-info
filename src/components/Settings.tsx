@@ -26,40 +26,6 @@ export default ({ settings }: SettingsProps) => {
     });
    return <>
     <ScrollView>
-        <FormSection title="Enable Account Date Information">
-            <FormRow
-                label='Time of Creation'
-                subLabel='Show when an account was Created'
-                leading={<FormRow.Icon style={styles.icon} source={getIDByName('ic_header_members_add_24px')} />}
-                trailing={
-                    <FormSwitch
-                        value={settings.getBoolean('createBtn', true)}
-                        onValueChange={() => {
-                                settings.toggle('createBtn', true)
-                                Toasts.open({ content: `Successfully ${settings.getBoolean('createBtn', true) ? 'enabled' : 'disabled'} time of Account Creation.`, source: toastTrail })
-                            }
-                        }
-                    />
-                }
-            />
-            <FormDivider />
-            <FormRow
-                label='Time of Joining Server'
-                subLabel='Show when an account Joined a Server'
-                leading={<FormRow.Icon style={styles.icon} source={getIDByName('ic_leave_24px')} />}
-                trailing={
-                    <FormSwitch
-                        value={settings.getBoolean('joinBtn', true)}
-                        onValueChange={() => {
-                                settings.toggle('joinBtn', true)
-                                Toasts.open({ content: `Successfully ${settings.getBoolean('joinBtn', true) ? 'enabled' : 'disabled'} time of Joining Server.`, source: toastTrail })
-                            }
-                        }
-                    />
-                }
-            />
-        </FormSection>
-        <FormDivider />
         <FormSection title="Enable Dedicated Buttons">
             <FormRow
                 label="Assets"
