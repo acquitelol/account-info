@@ -113,13 +113,12 @@ const AccountInfo: Plugin = {
          // renders default header if the masterDisableBool is active
          return masterDisableBool ? <>{res}</> : <>
             {res}
-            {(pfpBool || statusBool) ? <>
-               <View style={styles.container}>
-                     {(pfpBool || (activityContent && statusBool)) ? <>
-                        <Text style={styles.header}>
-                           Account Assets
-                        </Text>
-                     </> : <></>}
+            <View style={styles.container}>
+               {(pfpBool || statusBool) ? <>
+                  {(pfpBool || (activityContent && statusBool)) ? <>
+                     <Text style={styles.header}>
+                        Account Assets
+                     </Text>
                      <View style={styles.information}>
                         {pfpBool && <>
                               <FormRow
@@ -164,9 +163,10 @@ const AccountInfo: Plugin = {
                            </>
                         }
                      </View>
-               </View>
-            </> : <></>}
-         </>
+                  </> : <></>}
+               </> : <></>}
+            </View>
+         </>;
       });
 
       Patcher.after(AvatarHeader, 'default', (_, [{ user }], res) => {
