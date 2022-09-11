@@ -1,6 +1,6 @@
 // main imports of elements and dependencies
 import { Constants, React, StyleSheet, Toasts } from 'enmity/metro/common';
-import { FormDivider, FormRow, FormSwitch, Text, View, Pressable, ScrollView } from 'enmity/components';
+import { FormDivider, FormRow, Text, View, Pressable } from 'enmity/components';
 import { Plugin, registerPlugin } from 'enmity/managers/plugins';
 import { getIDByName } from 'enmity/api/assets';
 import { bulk, filters, getByProps } from 'enmity/metro';
@@ -99,7 +99,12 @@ const AccountInfo: Plugin = {
          if (!image) return res
 
          const discrim = user.discriminator % 5;
-         const url = typeof image === 'number' ? `https://cdn.discordapp.com/embed/avatars/${discrim}.png` : image?.replace('.webp', '.png');
+
+         // splits the uri into the pfpHash and userId of the url to determine gif pfp
+         let pfpImageSplitBySlashes = image.split('/')
+         let pfpHash = (pfpImageSplitBySlashes[5]).split('.')[0]
+
+         const url = typeof image === 'number' ? `https://cdn.discordapp.com/embed/avatars/${discrim}.png` : image?.replace('.webp', pfpHash.startsWith("a_")?".gif":".png");
          
          // get a user's status through getActivities method
          const activityContent = Activity.getActivities(user.id).find(ac => ac.type === 4)
@@ -172,7 +177,12 @@ const AccountInfo: Plugin = {
          if (!image) return res;
 
          const discrim = user.discriminator % 5;
-         const url = typeof image === 'number' ? `https://cdn.discordapp.com/embed/avatars/${discrim}.png` : image?.replace('.webp', '.png');
+
+         // splits the uri into the pfpHash and userId of the url to determine gif pfp
+         let pfpImageSplitBySlashes = image.split('/')
+         let pfpHash = (pfpImageSplitBySlashes[5]).split('.')[0]
+
+         const url = typeof image === 'number' ? `https://cdn.discordapp.com/embed/avatars/${discrim}.png` : image?.replace('.webp', pfpHash.startsWith("a_")?".gif":".png");
 
          // render the pressable with the main pfp inside, otherwise just render the pfp if any of the settings are toggled
          return masterDisableBool ? <>{res}</> : pfpBool ? <>{res}</> : <Pressable onPress={() => Router.openURL(url)}>
@@ -247,7 +257,7 @@ const AccountInfo: Plugin = {
    },
 
    onStop() {
-      // unpatches everything and clears the clipboard
+      // unpatches everything
       Patcher.unpatchAll();
    },
 
