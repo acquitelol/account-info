@@ -115,9 +115,11 @@ const AccountInfo: Plugin = {
             {res}
             <View style={styles.container}>
                {(pfpBool || statusBool) ? <>
-                  <Text style={styles.header}>
-                     Account Assets
-                  </Text>
+                  {(pfpBool || (activityContent && statusBool)) ? <>
+                     <Text style={styles.header}>
+                        Account Assets
+                     </Text>
+                  </> : <></>}
                   <View style={styles.information}>
                      {pfpBool && <>
                            <FormRow
