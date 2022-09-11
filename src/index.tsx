@@ -113,60 +113,60 @@ const AccountInfo: Plugin = {
          // renders default header if the masterDisableBool is active
          return masterDisableBool ? <>{res}</> : <>
             {res}
-            <View style={styles.container}>
-               {(pfpBool || statusBool) ? <>
-                  {(pfpBool || (activityContent && statusBool)) ? <>
-                     <Text style={styles.header}>
-                        Account Assets
-                     </Text>
-                  </> : <></>}
-                  <View style={styles.information}>
-                     {pfpBool && <>
-                           <FormRow
-                              label={`View ${user.username}'s ${pfpState}`}
-                              leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
-                              trailing={FormRow.Arrow}
-                              onPress={() => {
-                                 // if theres a banner hash then allow the user to toggle to it, otherwise open the pfp link
-                                 bannerHash ? getBoolean("AccountInfo", 'pfpToggle', true) ? Router.openURL(url) : Router.openURL(`https://cdn.discordapp.com/banners/${user.id}/${bannerHash}.${bannerHash.startsWith('a_')?'gif':'png'}?size=4096`) : Router.openURL(url)
-                              }}
-                              onLongPress={bannerHash ? () => {
-                                 // toggles the text inside the button with the setState defined earlier if theres a banner hash,
-                                 // otherwise say theres no banner if they attempt to longPress on the button
-                                 toggle("AccountInfo", 'pfpToggle', true)
-                                 Toasts.open({ content: `Switched to ${getBoolean('AccountInfo', 'pfpToggle', true) ? 'profile picture' : 'banner'} link.`, source: Pfp })
-                                 setPfpState(pfpState=='Profile Picture' ? "Banner" : "Profile Picture")
-                              }: () => {
-                                 Toasts.open({ content: `${user.username} does not have a banner.`, source: Pfp })
-                              }}
-                           >
-                           </FormRow>
-                     </>}
-                     {pfpBool && statusBool && <FormDivider />}
-                     {activityContent && statusBool && <>
-                           <FormRow
-                              label={`Copy ${user.username}'s Status`}
-                              leading={<FormRow.Icon style={styles.icon} source={ActivityForm} />}
-                              trailing={FormRow.Arrow}
-                              onPress={() => {
-                                 // check if theres an emoji in the status and declare it, otherwise do nothing
-                                 try {
-                                    var emojiName = activityContent.emoji.name
-                                 } catch {
-                                    
-                                 }
+            {(pfpBool || statusBool) ? <>
+               <View style={styles.container}>
+                     {(pfpBool || (activityContent && statusBool)) ? <>
+                        <Text style={styles.header}>
+                           Account Assets
+                        </Text>
+                     </> : <></>}
+                     <View style={styles.information}>
+                        {pfpBool && <>
+                              <FormRow
+                                 label={`View ${user.username}'s ${pfpState}`}
+                                 leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
+                                 trailing={FormRow.Arrow}
+                                 onPress={() => {
+                                    // if theres a banner hash then allow the user to toggle to it, otherwise open the pfp link
+                                    bannerHash ? getBoolean("AccountInfo", 'pfpToggle', true) ? Router.openURL(url) : Router.openURL(`https://cdn.discordapp.com/banners/${user.id}/${bannerHash}.${bannerHash.startsWith('a_')?'gif':'png'}?size=4096`) : Router.openURL(url)
+                                 }}
+                                 onLongPress={bannerHash ? () => {
+                                    // toggles the text inside the button with the setState defined earlier if theres a banner hash,
+                                    // otherwise say theres no banner if they attempt to longPress on the button
+                                    toggle("AccountInfo", 'pfpToggle', true)
+                                    Toasts.open({ content: `Switched to ${getBoolean('AccountInfo', 'pfpToggle', true) ? 'profile picture' : 'banner'} link.`, source: Pfp })
+                                    setPfpState(pfpState=='Profile Picture' ? "Banner" : "Profile Picture")
+                                 }: () => {
+                                    Toasts.open({ content: `${user.username} does not have a banner.`, source: Pfp })
+                                 }}
+                              >
+                              </FormRow>
+                        </>}
+                        {pfpBool && statusBool && <FormDivider />}
+                        {activityContent && statusBool && <>
+                              <FormRow
+                                 label={`Copy ${user.username}'s Status`}
+                                 leading={<FormRow.Icon style={styles.icon} source={ActivityForm} />}
+                                 trailing={FormRow.Arrow}
+                                 onPress={() => {
+                                    // check if theres an emoji in the status and declare it, otherwise do nothing
+                                    try {
+                                       var emojiName = activityContent.emoji.name
+                                    } catch {
+                                       
+                                    }
 
-                                 // set the status to clipboard and open a toast declaring success
-                                 Clipboard.setString(`${emojiName ? `:${emojiName}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
-                                 Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
-                              }}
-                           />
-                        </>
-                     }
-                  </View>
-               </> : <></>}
-            </View>
-         </>;
+                                    // set the status to clipboard and open a toast declaring success
+                                    Clipboard.setString(`${emojiName ? `:${emojiName}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
+                                    Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
+                                 }}
+                              />
+                           </>
+                        }
+                     </View>
+               </View>
+            </> : <></>}
+         </>
       });
 
       Patcher.after(AvatarHeader, 'default', (_, [{ user }], res) => {
