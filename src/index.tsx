@@ -19,8 +19,6 @@ const [
    ProfileBanner
 ] = bulk(
    filters.byDisplayName('UserProfileHeader', false),
-   filters.byProps('getMember'),
-   filters.byProps('getGuild'),
    filters.byProps('transitionToGuild'),
    filters.byProps('setString'),
    filters.byName('HeaderAvatar', false),
@@ -35,14 +33,14 @@ const AccountInfo: Plugin = {
    ...manifest,
 
    onStart() {
-      Patcher.after(Header, 'default', (self, args, res) => {
+      Patcher.after(Header, 'default', (_, args, res) => {
          // used for pfp button
          const [pfpState, setPfpState] = React.useState('Profile Picture')
 
          // setting booleans for toggling buttons
          let pfpBool = getBoolean("AccountInfo", 'pfpBtn', false)
          let statusBool = getBoolean("AccountInfo", "statusBtn", false)
-		   let masterDisableBool = getBoolean("AccountInfo", "masterDisable", false)
+         let masterDisableBool = getBoolean("AccountInfo", "masterDisable", false)
 
          // destructuring the object to make it easier to use the args inside of the object
          const [{ user, type }] = args;
@@ -56,7 +54,7 @@ const AccountInfo: Plugin = {
          }
 
          if (type !== 0) {
-            return res;
+            return res
          }
          
          // main stylesheet for native element padding etc
@@ -98,7 +96,7 @@ const AccountInfo: Plugin = {
 
          // get a user's pfp through the getAvatarURL method
          const image = user?.getAvatarURL?.(false, 4096, true);
-         if (!image) return res;
+         if (!image) return res
 
          const discrim = user.discriminator % 5;
          const url = typeof image === 'number' ? `https://cdn.discordapp.com/embed/avatars/${discrim}.png` : image?.replace('.webp', '.png');
@@ -165,7 +163,7 @@ const AccountInfo: Plugin = {
       });
 
       Patcher.after(AvatarHeader, 'default', (_, [{ user }], res) => {
-        
+      
          let pfpBool = getBoolean("AccountInfo", 'pfpBtn', false)
          let masterDisableBool = getBoolean("AccountInfo", "masterDisable", false)
 
@@ -215,11 +213,11 @@ const AccountInfo: Plugin = {
          // gets the other elements inside the tree
          const leftElems = findInReactTree(res, e => e?.[2]?.props?.customStatusActivity);
          if (!leftElems) return res;
-       
+      
          // gets the statusBool setting, and renders default header with 'return res' if this value is truthy.
          const statusBool = getBoolean("AccountInfo", "statusBtn", false);
          if (statusBool) return res;
-       
+      
          // gets the masterDisableBool setting, and renders default header with 'return res' if this value is truthy.
          const masterDisableBool = getBoolean("AccountInfo", "masterDisable", false);
          if (masterDisableBool) return res;
@@ -227,10 +225,10 @@ const AccountInfo: Plugin = {
          // gets the status of a user and returns practically the same as getActivities(user.id)
          const activityContent = leftElems[2].props.customStatusActivity;
          const ActivityToast = getIDByName('pending-alert');
-       
+      
          // force replace the status component with a pressable with a statusElem inside
          leftElems[2] = <Pressable onPress={
-           () => {
+         () => {
                // check if theres an emoji in the status and declare it, otherwise do nothing
                try {
                   var emojiName = activityContent.emoji.name
@@ -241,11 +239,11 @@ const AccountInfo: Plugin = {
                // set the status to clipboard and open a toast declaring success
                Clipboard.setString(`${emojiName ? `:${emojiName}:` : ""} ${activityContent.state ? activityContent.state : ""}`);
                Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
-           }
+         }
          }>
-           { statusElem }
+         { statusElem }
          </Pressable>;
-       })
+      })
    },
 
    onStop() {
