@@ -18,7 +18,7 @@ const [
    AvatarHeader,
    ProfileBanner
 ] = bulk(
-   filters.byDisplayName('UserProfileHeader', false),
+   filters.byName('UserProfileHeader', false),
    filters.byProps('transitionToGuild'),
    filters.byProps('setString'),
    filters.byName('HeaderAvatar', false),
