@@ -33,7 +33,7 @@ const AccountInfo: Plugin = {
 
          // destructuring the object to make it easier to use the args inside of the object
          console.log(args)
-         console.log('some change')
+         console.log('some changes')
          
          // main stylesheet for native element padding etc
          // const styles = StyleSheet.createThemedStyleSheet({
