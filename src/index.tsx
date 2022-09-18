@@ -19,7 +19,7 @@ const [
 );
 
 // initialization
-const Patcher = create('');
+const Patcher = create('dislate');
 const Activity = getByProps('getStatus', 'getState')
 
 const AccountInfo: Plugin = {
