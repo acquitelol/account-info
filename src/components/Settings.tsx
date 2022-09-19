@@ -26,6 +26,40 @@ export default ({ settings }: SettingsProps) => {
     });
    return <>
     <ScrollView>
+        <FormSection title="Enable Dedicated Buttons">
+            <FormRow
+                label="Assets"
+                subLabel="Show dedicated button to view Account Assets"
+                leading={<FormRow.Icon style={styles.icon} source={getIDByName('img_nitro_profile_banner')} />}
+                trailing={
+                    <FormSwitch
+                        value={settings.getBoolean('pfpBtn', false)}
+                        onValueChange={() => {
+                                settings.toggle('pfpBtn', false)
+                                Toasts.open({ content: `Successfully ${settings.getBoolean('pfpBtn', false) ? 'enabled' : 'disabled'} dedicated Assets Button.`, source: toastTrail })
+                            }
+                        }
+                    />
+                }
+            />
+            <FormDivider />
+            <FormRow
+                label='Status'
+                subLabel="Show dedicated button to copy a user's Status"
+                leading={<FormRow.Icon style={styles.icon} source={getIDByName('ic_passport_24px')} />}
+                trailing={
+                    <FormSwitch
+                        value={settings.getBoolean('statusBtn', false)}
+                        onValueChange={() => {
+                                settings.toggle('statusBtn', false)
+                                Toasts.open({ content: `Successfully ${settings.getBoolean('statusBtn', false) ? 'enabled' : 'disabled'} dedicated Status Button.`, source: toastTrail });
+                            }
+                        }
+                    />
+                }
+            />
+        </FormSection>
+        <FormDivider />
 		<FormSection title="Disable Entire Plugin">
             <FormRow
                 label='Disable Plugin'
@@ -50,7 +84,7 @@ export default ({ settings }: SettingsProps) => {
                 leading={<FormRow.Icon style={styles.icon} source={getIDByName('toast_copy_link')} />}
                 trailing={FormRow.Arrow}
                 onPress={() => {
-                    Clipboard.setString("https://raw.githubusercontent.com/acquitelol/dislate/main/dist/Dislate.js");
+                    Clipboard.setString("https://raw.githubusercontent.com/acquitelol/account-info/main/dist/AccountInfo.js");
                     Toasts.open({ content: 'Copied to clipboard', source: getIDByName('pending-alert') });
                 }}
             />
@@ -60,7 +94,7 @@ export default ({ settings }: SettingsProps) => {
                 leading={<FormRow.Icon style={styles.icon} source={getIDByName('ic_leave_stage')} />}
                 trailing={FormRow.Arrow}
                 onPress={() => {
-                    Router.openURL("https://github.com/acquitelol/dislate")
+                    Router.openURL("https://github.com/acquitelol/account-info")
                 }}
             />
         </FormSection>
