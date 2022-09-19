@@ -113,14 +113,14 @@ const AccountInfo: Plugin = {
          // renders default header if the masterDisableBool is active
          return masterDisableBool ? <>{res}</> : <>
             {res}
-            <View style={styles.container}>
+            {image?<View style={styles.container}>
                {(pfpBool || statusBool) ? <>
                   {(pfpBool || (activityContent && statusBool)) ? <>
                      <Text style={styles.header}>
                         Account Assets
                      </Text>
                      <View style={styles.information}>
-                        {pfpBool && <>
+                        {pfpBool ? <>
                               <FormRow
                                  label={`View ${user.username}'s ${pfpState}`}
                                  leading={<FormRow.Icon style={styles.icon} source={Pfp} />}
@@ -140,9 +140,9 @@ const AccountInfo: Plugin = {
                                  }}
                               >
                               </FormRow>
-                        </>}
-                        {pfpBool && statusBool && <FormDivider />}
-                        {activityContent && statusBool && <>
+                        </>:<></>}
+                        {pfpBool && statusBool ? <FormDivider /> : <></>}
+                        {activityContent && statusBool ? <>
                               <FormRow
                                  label={`Copy ${user.username}'s Status`}
                                  leading={<FormRow.Icon style={styles.icon} source={ActivityForm} />}
@@ -160,12 +160,12 @@ const AccountInfo: Plugin = {
                                     Toasts.open({ content: 'Copied to clipboard', source: ActivityToast });
                                  }}
                               />
-                           </>
+                           </>:<></>
                         }
                      </View>
                   </> : <></>}
                </> : <></>}
-            </View>
+            </View>:<></>}
          </>;
       });
 
