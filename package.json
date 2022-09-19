@@ -1,7 +1,7 @@
 {
-   "name": "account-info",
-   "description": "Shows Account Information and Account Assets.",
-   "version": "1.4.2",
+   "name": "dislate",
+   "description": "Allows you to translate text into a different language.",
+   "version": "1.0.0",
    "license": "GPL-3.0",
    "author": "Acquite",
    "scripts": {
